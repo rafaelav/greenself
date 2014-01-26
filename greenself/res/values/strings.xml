@@ -4,5 +4,7 @@
     <string name="app_name">greenself</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="random_task_text">Task goes here</string>
+    <string name="day_challenge">Day\'s Challenge</string>
 
 </resources>

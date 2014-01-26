@@ -1,11 +1,14 @@
 package com.greenself.daogen;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
+import de.greenrobot.dao.internal.SqlUtils;
 import de.greenrobot.dao.internal.DaoConfig;
 
 import com.greenself.daogen.Task;
@@ -23,14 +26,12 @@ public class TaskDao extends AbstractDao<Task, Long> {
      * Can be used for QueryBuilder and for referencing column names.
     */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Actvity = new Property(1, String.class, "actvity", false, "ACTVITY");
-        public final static Property RecurrenceDB = new Property(2, String.class, "recurrenceDB", false, "RECURRENCE_DB");
-        public final static Property Applicability = new Property(3, Boolean.class, "applicability", false, "APPLICABILITY");
-        public final static Property Status = new Property(4, Boolean.class, "status", false, "STATUS");
-        public final static Property Info = new Property(5, String.class, "info", false, "INFO");
-        public final static Property Date = new Property(6, java.util.Date.class, "date", false, "DATE");
+        public final static Property Status = new Property(0, boolean.class, "status", false, "STATUS");
+        public final static Property Date = new Property(1, java.util.Date.class, "date", false, "DATE");
+        public final static Property Id = new Property(2, Long.class, "id", true, "_id");
     };
+
+    private DaoSession daoSession;
 
 
     public TaskDao(DaoConfig config) {
@@ -39,19 +40,16 @@ public class TaskDao extends AbstractDao<Task, Long> {
     
     public TaskDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'TASK' (" + //
-                "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'ACTVITY' TEXT NOT NULL ," + // 1: actvity
-                "'RECURRENCE_DB' TEXT," + // 2: recurrenceDB
-                "'APPLICABILITY' INTEGER," + // 3: applicability
-                "'STATUS' INTEGER," + // 4: status
-                "'INFO' TEXT," + // 5: info
-                "'DATE' INTEGER);"); // 6: date
+                "'STATUS' INTEGER NOT NULL ," + // 0: status
+                "'DATE' INTEGER," + // 1: date
+                "'_id' INTEGER PRIMARY KEY );"); // 2: id
     }
 
     /** Drops the underlying database table. */
@@ -64,56 +62,38 @@ public class TaskDao extends AbstractDao<Task, Long> {
     @Override
     protected void bindValues(SQLiteStatement stmt, Task entity) {
         stmt.clearBindings();
- 
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
-        stmt.bindString(2, entity.getActvity());
- 
-        String recurrenceDB = entity.getRecurrenceDB();
-        if (recurrenceDB != null) {
-            stmt.bindString(3, recurrenceDB);
-        }
- 
-        Boolean applicability = entity.getApplicability();
-        if (applicability != null) {
-            stmt.bindLong(4, applicability ? 1l: 0l);
-        }
- 
-        Boolean status = entity.getStatus();
-        if (status != null) {
-            stmt.bindLong(5, status ? 1l: 0l);
-        }
- 
-        String info = entity.getInfo();
-        if (info != null) {
-            stmt.bindString(6, info);
-        }
+        stmt.bindLong(1, entity.getStatus() ? 1l: 0l);
  
         java.util.Date date = entity.getDate();
         if (date != null) {
-            stmt.bindLong(7, date.getTime());
+            stmt.bindLong(2, date.getTime());
         }
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(3, id);
+        }
+    }
+
+    @Override
+    protected void attachEntity(Task entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2);
     }    
 
     /** @inheritdoc */
     @Override
     public Task readEntity(Cursor cursor, int offset) {
         Task entity = new Task( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1), // actvity
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // recurrenceDB
-            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // applicability
-            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // status
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // info
-            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)) // date
+            cursor.getShort(offset + 0) != 0, // status
+            cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)), // date
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2) // id
         );
         return entity;
     }
@@ -121,13 +101,9 @@ public class TaskDao extends AbstractDao<Task, Long> {
     /** @inheritdoc */
     @Override
     public void readEntity(Cursor cursor, Task entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setActvity(cursor.getString(offset + 1));
-        entity.setRecurrenceDB(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setApplicability(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
-        entity.setStatus(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
-        entity.setInfo(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setDate(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setStatus(cursor.getShort(offset + 0) != 0);
+        entity.setDate(cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)));
+        entity.setId(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
      }
     
     /** @inheritdoc */
@@ -153,4 +129,95 @@ public class TaskDao extends AbstractDao<Task, Long> {
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getTaskSourceDao().getAllColumns());
+            builder.append(" FROM TASK T");
+            builder.append(" LEFT JOIN TASK_SOURCE T0 ON T.'_id'=T0.'_id'");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected Task loadCurrentDeep(Cursor cursor, boolean lock) {
+        Task entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        TaskSource taskSource = loadCurrentOther(daoSession.getTaskSourceDao(), cursor, offset);
+        entity.setTaskSource(taskSource);
+
+        return entity;    
+    }
+
+    public Task loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<Task> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<Task> list = new ArrayList<Task>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<Task> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<Task> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }
