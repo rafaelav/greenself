@@ -79,6 +79,13 @@ public class TaskSource {
     }
 
     // KEEP METHODS - put your custom methods here
+    public TaskSource(Boolean applicability, Type type, String name, String info) {
+        this.applicability = applicability;
+        this.info = info;
+        this.name = name;
+        this.type = type;
+    }
+    
     public void setType(Type recurrence) {
     	this.typeDB = recurrence.name();
     	this.type = recurrence;

@@ -1,31 +1,37 @@
 package com.greenself;
 
-import android.database.sqlite.SQLiteDatabase;
+import java.util.logging.Logger;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
-import com.greenself.daogen.DaoMaster;
-import com.greenself.daogen.DaoMaster.DevOpenHelper;
-import com.greenself.daogen.DaoSession;
-import com.greenself.daogen.Task;
-import com.greenself.objects.Constants.Type;
+import com.greenself.dbhandlers.DBManager;
+import com.greenself.objects.Constants;
 
 public class MainActivity extends FragmentActivity {
+	private static final Logger log=Logger.getLogger(MainActivity.class.getName());
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		// only first time the app runs
+		//DBManager.getInstance(this).resetDB();
+		
+		log.info(DBManager.getInstance(this).getDaoSession().getTaskSourceDao().loadAll()+"");
+
+		// check existing active tasks and generate new if there aren't any
+		if (TaskHandler
+				.verifyIfPreviousTasks(TaskHandler.loadActiveTasks(this)) == false) {
+			log.info("No existing tasks. Need to generate.");
+			
+			TaskHandler.generateActiveTasks(this, Constants.NO_OF_TASKS);
+		} else {
+			log.info("Existing tasks");
+		}
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		/*Task task = new Task();
-		task.setName("Task 1");
-		task.setType(Type.DAILY);
-
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "notes-db", null);
-		SQLiteDatabase db = helper.getWritableDatabase();
-		DaoMaster daoMaster = new DaoMaster(db);
-		DaoSession daoSession = daoMaster.newSession();
-		daoSession.getTaskDao().insert(task);*/
+		
 	}
 
 	@Override

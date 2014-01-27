@@ -1,7 +1,5 @@
 package com.greenself;
 
-import java.util.ArrayList;
-
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
@@ -10,13 +8,13 @@ import de.greenrobot.daogenerator.Schema;
 public class GreenselfDAOGenerator {
 
 	public static void main(String[] args) throws Exception {
-		Schema schema = new Schema(10, "com.greenself.daogen");
+		Schema schema = new Schema(12, "com.greenself.daogen");
 		schema.enableKeepSectionsByDefault();
 
 		Entity task = addTask(schema);
 		Entity taskSource = addTaskSource(schema);
 
-		Property taskIdProperty = task.addIdProperty().getProperty();
+		Property taskIdProperty = task.addIdProperty().notNull().getProperty();
 		task.addToOne(taskSource, taskIdProperty);
 
 		addHabbit(schema);

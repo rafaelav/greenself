@@ -28,7 +28,7 @@ public class TaskDao extends AbstractDao<Task, Long> {
     public static class Properties {
         public final static Property Status = new Property(0, boolean.class, "status", false, "STATUS");
         public final static Property Date = new Property(1, java.util.Date.class, "date", false, "DATE");
-        public final static Property Id = new Property(2, Long.class, "id", true, "_id");
+        public final static Property Id = new Property(2, long.class, "id", true, "_id");
     };
 
     private DaoSession daoSession;
@@ -49,7 +49,7 @@ public class TaskDao extends AbstractDao<Task, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'TASK' (" + //
                 "'STATUS' INTEGER NOT NULL ," + // 0: status
                 "'DATE' INTEGER," + // 1: date
-                "'_id' INTEGER PRIMARY KEY );"); // 2: id
+                "'_id' INTEGER PRIMARY KEY NOT NULL );"); // 2: id
     }
 
     /** Drops the underlying database table. */
@@ -68,11 +68,7 @@ public class TaskDao extends AbstractDao<Task, Long> {
         if (date != null) {
             stmt.bindLong(2, date.getTime());
         }
- 
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(3, id);
-        }
+        stmt.bindLong(3, entity.getId());
     }
 
     @Override
@@ -84,7 +80,7 @@ public class TaskDao extends AbstractDao<Task, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2);
+        return cursor.getLong(offset + 2);
     }    
 
     /** @inheritdoc */
@@ -93,7 +89,7 @@ public class TaskDao extends AbstractDao<Task, Long> {
         Task entity = new Task( //
             cursor.getShort(offset + 0) != 0, // status
             cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)), // date
-            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2) // id
+            cursor.getLong(offset + 2) // id
         );
         return entity;
     }
@@ -103,7 +99,7 @@ public class TaskDao extends AbstractDao<Task, Long> {
     public void readEntity(Cursor cursor, Task entity, int offset) {
         entity.setStatus(cursor.getShort(offset + 0) != 0);
         entity.setDate(cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)));
-        entity.setId(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
+        entity.setId(cursor.getLong(offset + 2));
      }
     
     /** @inheritdoc */
@@ -150,7 +146,9 @@ public class TaskDao extends AbstractDao<Task, Long> {
         int offset = getAllColumns().length;
 
         TaskSource taskSource = loadCurrentOther(daoSession.getTaskSourceDao(), cursor, offset);
-        entity.setTaskSource(taskSource);
+         if(taskSource != null) {
+            entity.setTaskSource(taskSource);
+        }
 
         return entity;    
     }

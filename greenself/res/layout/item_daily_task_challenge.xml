@@ -7,7 +7,9 @@
         android:id="@+id/TaskStatusCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:id="@+id/TaskTextView"
@@ -16,7 +18,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="@dimen/item_task_top_margin"
         android:layout_toRightOf="@id/TaskStatusCheckBox"
-        android:textSize="@dimen/item_task_text_size"
-        android:text="@string/random_task_text" />
+        android:text="@string/random_task_text"
+        android:textSize="@dimen/item_task_text_size" />
 
 </RelativeLayout>

@@ -14,7 +14,7 @@ public class Task {
 
     private boolean status;
     private java.util.Date date;
-    private Long id;
+    private long id;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -32,11 +32,11 @@ public class Task {
     public Task() {
     }
 
-    public Task(Long id) {
+    public Task(long id) {
         this.id = id;
     }
 
-    public Task(boolean status, java.util.Date date, Long id) {
+    public Task(boolean status, java.util.Date date, long id) {
         this.status = status;
         this.date = date;
         this.id = id;
@@ -64,17 +64,17 @@ public class Task {
         this.date = date;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     /** To-one relationship, resolved on first access. */
     public TaskSource getTaskSource() {
-        Long __key = this.id;
+        long __key = this.id;
         if (taskSource__resolvedKey == null || !taskSource__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -90,9 +90,12 @@ public class Task {
     }
 
     public void setTaskSource(TaskSource taskSource) {
+        if (taskSource == null) {
+            throw new DaoException("To-one property 'id' has not-null constraint; cannot set to-one to null");
+        }
         synchronized (this) {
             this.taskSource = taskSource;
-            id = taskSource == null ? null : taskSource.getId();
+            id = taskSource.getId();
             taskSource__resolvedKey = id;
         }
     }
@@ -122,6 +125,12 @@ public class Task {
     }
 
     // KEEP METHODS - put your custom methods here
+    // custom constructor
+    public Task(boolean status, java.util.Date date, TaskSource taskSource) {
+        this.status = status;
+        this.date = date;
+        setTaskSource(taskSource);
+    }
     // KEEP METHODS END
 
 }
