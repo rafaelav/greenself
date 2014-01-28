@@ -8,5 +8,7 @@
     <string name="random_task_text">Task goes here</string>
     <string name="day_challenge">Day\'s Challenge</string>
     <string name="ok">Got it!</string>
+    <string name="task_long_menu_change">Change with another</string>
+    <string name="task_long_menu_applicability">Not applicable</string>
 
-</resources>
+</resources> 
