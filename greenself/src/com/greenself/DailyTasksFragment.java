@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.greenself.adapters.DailyTaskItemAdapter;
 import com.greenself.daogen.Task;
+import com.greenself.dbhandlers.DBManager;
 
 public class DailyTasksFragment extends Fragment {
 
@@ -28,7 +29,7 @@ public class DailyTasksFragment extends Fragment {
 			.getName());
 
 	private ListView taskListView;
-	private List<Task> tasks;
+	DailyTaskItemAdapter taskAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,18 +39,20 @@ public class DailyTasksFragment extends Fragment {
 		taskListView = (ListView) view.findViewById(R.id.TasksListView);
 		registerForContextMenu(taskListView);
 		
+		List<Task> tasks;
+
 		tasks = TaskHandler.loadActiveTasks(getActivity());
 
 		log.info("Active tasks: " + tasks);
 
-		DailyTaskItemAdapter taskAdapter = new DailyTaskItemAdapter(tasks,
+		this.taskAdapter = new DailyTaskItemAdapter(tasks,
 				getActivity());
 
 		taskListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Task task = tasks.get(position);
+				Task task = taskAdapter.getItem(position);
 
 				log.info("Cliked element " + position + ": "
 						+ task.getTaskSource().getName());
@@ -67,8 +70,8 @@ public class DailyTasksFragment extends Fragment {
 				dialog.show();
 			}
 		});
-		
-		taskListView.setAdapter(taskAdapter);
+
+		taskListView.setAdapter(this.taskAdapter);
 
 		return view;
 	}
@@ -77,22 +80,31 @@ public class DailyTasksFragment extends Fragment {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-	    MenuInflater inflater = getActivity().getMenuInflater();
-	    inflater.inflate(R.menu.daily_task_long_click_menu, menu);
+		MenuInflater inflater = getActivity().getMenuInflater();
+		inflater.inflate(R.menu.daily_task_long_click_menu, menu);
 	}
-	
+
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-	    //AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-	    switch (item.getItemId()) {
-	        case R.id.MenuChangeTask:
-	            Toast.makeText(getActivity(), "Change",Toast.LENGTH_LONG).show();
-	            return true;
-	        case R.id.MenuApplicability:
-	        	Toast.makeText(getActivity(), "Applicability",Toast.LENGTH_LONG).show();
-	            return true;
-	        default:
-	            return super.onContextItemSelected(item);
-	    }
+		// AdapterContextMenuInfo info = (AdapterContextMenuInfo)
+		// item.getMenuInfo();
+		switch (item.getItemId()) {
+		case R.id.MenuChangeTask:
+			Toast.makeText(getActivity(), "Change", Toast.LENGTH_LONG).show();
+			return true;
+		case R.id.MenuApplicability:
+			Toast.makeText(getActivity(), "Applicability", Toast.LENGTH_LONG)
+					.show();
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		DBManager.getInstance(getActivity()).getDaoSession().getTaskDao()
+				.updateInTx(taskAdapter.getTasks());
 	}
 }

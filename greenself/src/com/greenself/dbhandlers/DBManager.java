@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.greenself.daogen.DaoMaster;
 import com.greenself.daogen.DaoMaster.DevOpenHelper;
 import com.greenself.daogen.DaoSession;
+import com.greenself.daogen.Task;
 import com.greenself.daogen.TaskSource;
 import com.greenself.objects.Constants;
 
