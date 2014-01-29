@@ -93,8 +93,7 @@ public class DailyTasksFragment extends Fragment {
 			replaceTask(item);
 			return true;
 		case R.id.MenuApplicability:
-			Toast.makeText(getActivity(), "Applicability", Toast.LENGTH_LONG)
-					.show();
+			changeApplicabilityToFalse(item);
 			return true;
 		default:
 			return super.onContextItemSelected(item);
@@ -119,6 +118,34 @@ public class DailyTasksFragment extends Fragment {
 
 		Toast.makeText(getActivity(), "Change is done!", Toast.LENGTH_LONG)
 				.show();
+	}
+
+	private void changeApplicabilityToFalse(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		Task unapplicableTask = taskAdapter.getItem(info.position);
+
+		// change applicability & update task source db
+		unapplicableTask.getTaskSource().setApplicability(false);
+		DBManager.getInstance(getActivity()).getDaoSession().getTaskSourceDao()
+				.update(unapplicableTask.getTaskSource());
+		// because this will not appear anymore something else must take its
+		// place
+		Task newTask = TaskHandler.getNewTask(taskAdapter.getTasks(),
+				getActivity());
+
+		// update ui
+		taskAdapter.addTask(newTask);
+		taskAdapter.removeTask(unapplicableTask);
+		taskAdapter.notifyDataSetChanged();
+
+		// remove old task from active tasks and add new one
+		DBManager.getInstance(getActivity()).getDaoSession().getTaskDao()
+				.delete(unapplicableTask);
+		DBManager.getInstance(getActivity()).getDaoSession().getTaskDao()
+				.insert(newTask);
+		Toast.makeText(getActivity(), "Applicability changed!",
+				Toast.LENGTH_LONG).show();
 	}
 
 	@Override
