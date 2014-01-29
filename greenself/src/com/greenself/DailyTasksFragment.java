@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -38,15 +39,14 @@ public class DailyTasksFragment extends Fragment {
 
 		taskListView = (ListView) view.findViewById(R.id.TasksListView);
 		registerForContextMenu(taskListView);
-		
+
 		List<Task> tasks;
 
 		tasks = TaskHandler.loadActiveTasks(getActivity());
 
 		log.info("Active tasks: " + tasks);
 
-		this.taskAdapter = new DailyTaskItemAdapter(tasks,
-				getActivity());
+		this.taskAdapter = new DailyTaskItemAdapter(tasks, getActivity());
 
 		taskListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -90,7 +90,7 @@ public class DailyTasksFragment extends Fragment {
 		// item.getMenuInfo();
 		switch (item.getItemId()) {
 		case R.id.MenuChangeTask:
-			Toast.makeText(getActivity(), "Change", Toast.LENGTH_LONG).show();
+			replaceTask(item);
 			return true;
 		case R.id.MenuApplicability:
 			Toast.makeText(getActivity(), "Applicability", Toast.LENGTH_LONG)
@@ -101,10 +101,41 @@ public class DailyTasksFragment extends Fragment {
 		}
 	}
 
+	private void replaceTask(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		Task oldTask = taskAdapter.getItem(info.position);
+		log.info("Item to change at position " + info.position + ": "
+				+ oldTask.getTaskSource().getName());
+
+		Task newTask = TaskHandler.getNewTask(taskAdapter.getTasks(),
+				getActivity());
+		TaskHandler.switchTasks(oldTask, newTask, getActivity());
+
+		// update ui
+		taskAdapter.addTask(newTask);
+		taskAdapter.removeTask(oldTask);
+		taskAdapter.notifyDataSetChanged();
+
+		Toast.makeText(getActivity(), "Change is done!", Toast.LENGTH_LONG)
+				.show();
+	}
+
 	@Override
 	public void onPause() {
 		super.onPause();
 		DBManager.getInstance(getActivity()).getDaoSession().getTaskDao()
 				.updateInTx(taskAdapter.getTasks());
 	}
+
+	// private void replaceTask(Task oldTask) {
+	// Task newTask = TaskHandler.getNewTask(taskAdapter.getTasks(),
+	// getActivity());
+	// TaskHandler.switchTasks(oldTask, newTask, getActivity());
+	//
+	// // update ui
+	// taskAdapter.addTask(newTask);
+	// taskAdapter.removeTask(oldTask);
+	// taskAdapter.notifyDataSetChanged();
+	// }
 }
