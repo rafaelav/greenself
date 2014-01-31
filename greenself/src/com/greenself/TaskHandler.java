@@ -59,7 +59,8 @@ public class TaskHandler {
 
 		// using queries for sorting tasks randomly and picking the first
 		List<TaskSource> taskSourceList = taskSourceDao.queryBuilder()
-				.orderRaw("random()").limit(count).list();
+				.where(Properties.Applicability.eq(true)).orderRaw("random()")
+				.limit(count).list();
 		log.info("List of random tasks: " + taskSourceList);
 
 		Iterator<TaskSource> iterator = taskSourceList.iterator();
