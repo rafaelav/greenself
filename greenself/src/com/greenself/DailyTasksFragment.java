@@ -1,5 +1,6 @@
 package com.greenself;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -25,7 +26,9 @@ import android.widget.Toast;
 
 import com.greenself.adapters.DailyTaskItemAdapter;
 import com.greenself.daogen.Task;
+import com.greenself.daogen.TaskDao;
 import com.greenself.dbhandlers.DBManager;
+import com.greenself.objects.Constants;
 
 public class DailyTasksFragment extends Fragment {
 
@@ -183,7 +186,7 @@ public class DailyTasksFragment extends Fragment {
 					addNewTask();
 					return true;
 				case R.id.generate_tasks:
-					//changeApplicabilityToFalse(item);
+					generateNewTasks();
 					return true;
 				case R.id.completed_visibility:
 					return true;
@@ -210,5 +213,42 @@ public class DailyTasksFragment extends Fragment {
 			Toast.makeText(getActivity(), "New task added!", Toast.LENGTH_LONG)
 					.show();
 		}
+	}
+
+	/**
+	 * Generates randomly n tasks (n set in settings). (The tasks marked as done
+	 * will not be removed from the screen) - All task are removed for now. The
+	 * other tasks are and they are also removed from active before regeneration
+	 * so that at regeneration some of them can reaper.
+	 */
+	private void generateNewTasks() {
+
+		TaskDao currentTaskDao = DBManager.getInstance(getActivity())
+				.getDaoSession().getTaskDao();
+		List<Task> toRemove = new ArrayList<Task>();
+		for (Task t : taskAdapter.getTasks()) {
+			// if (t.getStatus() == false) {
+			toRemove.add(t);
+			// }
+		}
+
+		// remove from active and from ui now
+		for (Task t : toRemove) {
+			taskAdapter.removeTask(t);
+			currentTaskDao.delete(t);
+		}
+
+		List<Task> newTasks = TaskHandler.generateActiveTasks(getActivity(),
+				Constants.NO_OF_TASKS);
+
+		// add in ui (already added in active db when they have been returned
+		// from db)
+		for (Task t : newTasks) {
+			taskAdapter.addTask(t);
+		}
+
+		taskAdapter.notifyDataSetChanged();
+		Toast.makeText(getActivity(), "Generated new tasks!", Toast.LENGTH_LONG)
+				.show();
 	}
 }

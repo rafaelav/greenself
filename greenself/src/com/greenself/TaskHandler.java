@@ -1,5 +1,6 @@
 package com.greenself;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -48,13 +49,13 @@ public class TaskHandler {
 	}
 
 	/**
-	 * Randomly selectes "count" tasks from the database to make active
+	 * Randomly selects "count" tasks from the database to make active
 	 * 
 	 * @param context
 	 * @param count
 	 *            (the number of tasks to activate)
 	 */
-	public static void generateActiveTasks(Context context, int count) {
+	public static List<Task> generateActiveTasks(Context context, int count) {
 		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
 		TaskSourceDao taskSourceDao = daoSession.getTaskSourceDao();
 
@@ -66,6 +67,7 @@ public class TaskHandler {
 
 		Iterator<TaskSource> iterator = taskSourceList.iterator();
 
+		List<Task> newTasks = new ArrayList<Task>();
 		while (iterator.hasNext()) {
 			TaskSource ts = iterator.next();
 
@@ -77,9 +79,12 @@ public class TaskHandler {
 
 			// insert task in active table in db
 			daoSession.getTaskDao().insert(t);
+			newTasks.add(t);
 
 			log.info("Added task: " + t.getTaskSource().getName());
 		}
+		
+		return newTasks;
 	}
 
 	/**
