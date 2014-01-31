@@ -78,13 +78,13 @@ public class DailyTasksFragment extends Fragment {
 
 		final ImageButton dailyExtraMenuButton = (ImageButton) view
 				.findViewById(R.id.DailyExtraMenuButton);
-		dailyExtraMenuButton.setOnClickListener(new OnClickListener() {			
+		dailyExtraMenuButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onPopupButtonClick(dailyExtraMenuButton);
 			}
 		});
-		
+
 		return view;
 	}
 
@@ -125,7 +125,7 @@ public class DailyTasksFragment extends Fragment {
 				getActivity());
 
 		// only if the switch is done should UI be updated
-		if (switched) {
+		if (switched & newTask != null) {
 			// update ui
 			taskAdapter.addTask(newTask);
 			taskAdapter.removeTask(oldTask);
@@ -178,21 +178,37 @@ public class DailyTasksFragment extends Fragment {
 
 		popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
-				log.info("Clicked popup menu item");
+				switch (item.getItemId()) {
+				case R.id.add_task:
+					addNewTask();
+					return true;
+				case R.id.generate_tasks:
+					//changeApplicabilityToFalse(item);
+					return true;
+				case R.id.completed_visibility:
+					return true;
+				}
 				return true;
 			}
 		});
 
 		popup.show();
 	}
-	// private void replaceTask(Task oldTask) {
-	// Task newTask = TaskHandler.getNewTask(taskAdapter.getTasks(),
-	// getActivity());
-	// TaskHandler.switchTasks(oldTask, newTask, getActivity());
-	//
-	// // update ui
-	// taskAdapter.addTask(newTask);
-	// taskAdapter.removeTask(oldTask);
-	// taskAdapter.notifyDataSetChanged();
-	// }
+
+	private void addNewTask() {
+		Task newTask = TaskHandler.getNewTask(taskAdapter.getTasks(),
+				getActivity());
+
+		if (newTask != null) {
+			// update active db
+			DBManager.getInstance(getActivity()).getDaoSession().getTaskDao()
+					.insert(newTask);
+			// update ui
+			taskAdapter.addTask(newTask);
+			taskAdapter.notifyDataSetChanged();
+
+			Toast.makeText(getActivity(), "New task added!", Toast.LENGTH_LONG)
+					.show();
+		}
+	}
 }
