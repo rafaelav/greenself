@@ -109,15 +109,19 @@ public class DailyTasksFragment extends Fragment {
 
 		Task newTask = TaskHandler.getNewTask(taskAdapter.getTasks(),
 				getActivity());
-		TaskHandler.switchTasks(oldTask, newTask, getActivity());
+		boolean switched = TaskHandler.switchTasks(oldTask, newTask,
+				getActivity());
 
-		// update ui
-		taskAdapter.addTask(newTask);
-		taskAdapter.removeTask(oldTask);
-		taskAdapter.notifyDataSetChanged();
+		// only if the switch is done should UI be updated
+		if (switched) {
+			// update ui
+			taskAdapter.addTask(newTask);
+			taskAdapter.removeTask(oldTask);
+			taskAdapter.notifyDataSetChanged();
 
-		Toast.makeText(getActivity(), "Change is done!", Toast.LENGTH_LONG)
-				.show();
+			Toast.makeText(getActivity(), "Change is done!", Toast.LENGTH_LONG)
+					.show();
+		}
 	}
 
 	private void changeApplicabilityToFalse(MenuItem item) {

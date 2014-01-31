@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.greenself.daogen.DaoSession;
 import com.greenself.daogen.Task;
@@ -146,7 +147,13 @@ public class TaskHandler {
 	 *            - task to be added instead
 	 * @param context
 	 */
-	public static void switchTasks(Task oldTask, Task newTask, Context context) {
+	public static boolean switchTasks(Task oldTask, Task newTask, Context context) {
+		// switch can happen only when a task was not already marked as done
+		if (oldTask.getStatus() == true) {
+			Toast.makeText(context, "Can't switch done tasks",
+					Toast.LENGTH_LONG).show();
+			return false;
+		}
 		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
 		TaskDao taskDao = daoSession.getTaskDao();
 
@@ -158,5 +165,7 @@ public class TaskHandler {
 		for (Task t : taskDao.loadAll()) {
 			log.info("Now in active: " + t.getTaskSource().getName());
 		}
+		
+		return true;
 	}
 }
