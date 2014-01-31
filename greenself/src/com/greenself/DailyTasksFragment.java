@@ -13,11 +13,14 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.greenself.adapters.DailyTaskItemAdapter;
@@ -73,6 +76,15 @@ public class DailyTasksFragment extends Fragment {
 
 		taskListView.setAdapter(this.taskAdapter);
 
+		final ImageButton dailyExtraMenuButton = (ImageButton) view
+				.findViewById(R.id.DailyExtraMenuButton);
+		dailyExtraMenuButton.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				onPopupButtonClick(dailyExtraMenuButton);
+			}
+		});
+		
 		return view;
 	}
 
@@ -159,6 +171,20 @@ public class DailyTasksFragment extends Fragment {
 				.updateInTx(taskAdapter.getTasks());
 	}
 
+	public void onPopupButtonClick(View button) {
+		PopupMenu popup = new PopupMenu(getActivity(), button);
+		popup.getMenuInflater().inflate(R.menu.daily_popup_menu,
+				popup.getMenu());
+
+		popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem item) {
+				log.info("Clicked popup menu item");
+				return true;
+			}
+		});
+
+		popup.show();
+	}
 	// private void replaceTask(Task oldTask) {
 	// Task newTask = TaskHandler.getNewTask(taskAdapter.getTasks(),
 	// getActivity());

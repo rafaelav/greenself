@@ -10,5 +10,8 @@
     <string name="ok">Got it!</string>
     <string name="task_long_menu_change">Change with another</string>
     <string name="task_long_menu_applicability">Not applicable</string>
+    <string name="add_task">Add new task</string>
+    <string name="generate_tasks">Generate new tasks</string>
+    <string name="visibility_completed_tasks">Do not show completed</string>
 
 </resources> 
