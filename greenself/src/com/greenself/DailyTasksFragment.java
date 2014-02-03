@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
@@ -36,7 +38,7 @@ public class DailyTasksFragment extends Fragment {
 			.getName());
 
 	private ListView taskListView;
-	DailyTaskItemAdapter taskAdapter;
+	private DailyTaskItemAdapter taskAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -189,6 +191,7 @@ public class DailyTasksFragment extends Fragment {
 					generateNewTasks();
 					return true;
 				case R.id.completed_visibility:
+					changeDoneTasksVisibility();
 					return true;
 				}
 				return true;
@@ -250,5 +253,52 @@ public class DailyTasksFragment extends Fragment {
 		taskAdapter.notifyDataSetChanged();
 		Toast.makeText(getActivity(), "Generated new tasks!", Toast.LENGTH_LONG)
 				.show();
+	}
+
+	/**
+	 * Changes visibility settings for done tasks/ true - tasks are visible to
+	 * the user in the ui false - tasks are not visible to the user in the ui
+	 */
+	private void changeDoneTasksVisibility() {
+		List<Task> toRemoveFromUi = new ArrayList<Task>();
+		
+		SharedPreferences prefs = getActivity().getSharedPreferences(
+				Constants.APP, Context.MODE_PRIVATE);
+
+		// determine what was set so that we can determine what we change to
+		// (default is true - the done tasks appear on screen)
+		boolean visible = prefs.getBoolean(
+				Constants.SETTINGS_DONE_TASKS_VISIBILE, true);
+		
+		if (visible) {
+			prefs.edit()
+					.putBoolean(Constants.SETTINGS_DONE_TASKS_VISIBILE, false)
+					.commit();
+			for(Task t:taskAdapter.getTasks()) {
+				if(t.getStatus()) {
+					toRemoveFromUi.add(t);
+				}
+			}
+			
+			// they still stay in active
+			for (Task t:toRemoveFromUi) {
+				taskAdapter.removeTask(t);
+			}
+			taskAdapter.notifyDataSetChanged();
+			Toast.makeText(getActivity(), "Done tasks won't show",
+					Toast.LENGTH_LONG).show();
+		} else {
+			prefs.edit()
+					.putBoolean(Constants.SETTINGS_DONE_TASKS_VISIBILE, true)
+					.commit();
+			for(Task t:TaskHandler.loadActiveTasks(getActivity())){
+				if(t.getStatus()) {
+					taskAdapter.addTask(t);
+				}
+			}
+			taskAdapter.notifyDataSetChanged();
+			Toast.makeText(getActivity(), "Completed tasks will show",
+					Toast.LENGTH_LONG).show();
+		}
 	}
 }

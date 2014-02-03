@@ -2,6 +2,8 @@ package com.greenself;
 
 import java.util.logging.Logger;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;

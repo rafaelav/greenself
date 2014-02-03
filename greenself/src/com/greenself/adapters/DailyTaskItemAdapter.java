@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.greenself.DailyTasksFragment;
 import com.greenself.R;
 import com.greenself.daogen.Task;
 import com.greenself.dbhandlers.DBManager;
+import com.greenself.objects.Constants;
 
 import extraviews.DailyTaskItemView;
 
@@ -66,8 +68,9 @@ public class DailyTaskItemAdapter extends BaseAdapter {
 			convertView = new DailyTaskItemView(context);
 		}
 
-		// tie the convert view to the task at hand (either new view or recycled view)
-		((DailyTaskItemView) convertView).bind(tasks.get(position));		
+		// tie the convert view to the task at hand (either new view or recycled
+		// view)
+		((DailyTaskItemView) convertView).bind(tasks.get(position));
 
 		return convertView;
 	}
@@ -79,5 +82,4 @@ public class DailyTaskItemAdapter extends BaseAdapter {
 	public boolean removeTask(Task task) {
 		return tasks.remove(task);
 	}
-	
 }

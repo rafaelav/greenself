@@ -74,8 +74,9 @@ public class TaskHandler {
 			// get current date
 			Date date = new Date();
 
-			// create task based on taskSource info
-			Task t = new Task(false, date, ts);
+			// create task based on taskSource info (true for visibility because
+			// it's a new task so despite the preferences it should be seen)
+			Task t = new Task(false, true, date, ts);
 
 			// insert task in active table in db
 			daoSession.getTaskDao().insert(t);
@@ -83,7 +84,7 @@ public class TaskHandler {
 
 			log.info("Added task: " + t.getTaskSource().getName());
 		}
-		
+
 		return newTasks;
 	}
 
@@ -129,7 +130,7 @@ public class TaskHandler {
 			Date date = new Date();
 
 			// create task based on taskSource info
-			newTask = new Task(false, date, ts);
+			newTask = new Task(false, true, date, ts);
 			break;
 		}
 
@@ -152,7 +153,8 @@ public class TaskHandler {
 	 *            - task to be added instead
 	 * @param context
 	 */
-	public static boolean switchTasks(Task oldTask, Task newTask, Context context) {
+	public static boolean switchTasks(Task oldTask, Task newTask,
+			Context context) {
 		// switch can happen only when a task was not already marked as done
 		if (oldTask.getStatus() == true) {
 			Toast.makeText(context, "Can't switch done tasks",
@@ -170,7 +172,7 @@ public class TaskHandler {
 		for (Task t : taskDao.loadAll()) {
 			log.info("Now in active: " + t.getTaskSource().getName());
 		}
-		
+
 		return true;
 	}
 }

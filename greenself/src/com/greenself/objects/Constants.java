@@ -6,6 +6,8 @@ public final class Constants {
 
 	public static final int NO_OF_TASKS = 5;
 	public static final String DB_NAME = "task-db";
+	public static final String SETTINGS_DONE_TASKS_VISIBILE = "done_tasks_visibility";
+	public static final String APP = "com.greenself";
 
 	// time recurrent frame
 	public enum Type {
