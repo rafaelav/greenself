@@ -3,6 +3,7 @@ package extraviews;
 import java.util.logging.Logger;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.widget.CheckBox;
@@ -39,7 +40,7 @@ public class DailyTaskItemView extends RelativeLayout {
 		this.text.setText(this.task.getTaskSource().getName());
 
 		// making sure that tasks who are done have strike and the others don't
-		setStrikeBehavior();
+		setTaskAppearence();
 
 		this.checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -49,7 +50,7 @@ public class DailyTaskItemView extends RelativeLayout {
 				log.info("Before click: " + task.getStatus());
 				task.setStatus(isChecked);
 				log.info("After click: " + task.getStatus());
-				setStrikeBehavior();
+				setTaskAppearence();
 			}
 		});
 	}
@@ -58,14 +59,16 @@ public class DailyTaskItemView extends RelativeLayout {
 	 * If a task has the status Done then its text has a strike line If not - it
 	 * doesn't
 	 */
-	public void setStrikeBehavior() {
+	public void setTaskAppearence() {
 		// strike text or not
 		if (task.getStatus()) {
 			text.setPaintFlags(text.getPaintFlags()
 					| Paint.STRIKE_THRU_TEXT_FLAG);
+			text.setTextColor(Color.GRAY);
 		} else {
 			text.setPaintFlags(text.getPaintFlags()
 					& (~Paint.STRIKE_THRU_TEXT_FLAG));
+			text.setTextColor(Color.BLACK);
 		}
 	}
 }
