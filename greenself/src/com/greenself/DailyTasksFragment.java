@@ -261,7 +261,7 @@ public class DailyTasksFragment extends Fragment {
 	 */
 	private void changeDoneTasksVisibility() {
 		List<Task> toRemoveFromUi = new ArrayList<Task>();
-		
+
 		SharedPreferences prefs = getActivity().getSharedPreferences(
 				Constants.APP, Context.MODE_PRIVATE);
 
@@ -269,19 +269,19 @@ public class DailyTasksFragment extends Fragment {
 		// (default is true - the done tasks appear on screen)
 		boolean visible = prefs.getBoolean(
 				Constants.SETTINGS_DONE_TASKS_VISIBILE, true);
-		
+
 		if (visible) {
 			prefs.edit()
 					.putBoolean(Constants.SETTINGS_DONE_TASKS_VISIBILE, false)
 					.commit();
-			for(Task t:taskAdapter.getTasks()) {
-				if(t.getStatus()) {
+			for (Task t : taskAdapter.getTasks()) {
+				if (t.getStatus()) {
 					toRemoveFromUi.add(t);
 				}
 			}
-			
+
 			// they still stay in active
-			for (Task t:toRemoveFromUi) {
+			for (Task t : toRemoveFromUi) {
 				taskAdapter.removeTask(t);
 			}
 			taskAdapter.notifyDataSetChanged();
@@ -291,8 +291,8 @@ public class DailyTasksFragment extends Fragment {
 			prefs.edit()
 					.putBoolean(Constants.SETTINGS_DONE_TASKS_VISIBILE, true)
 					.commit();
-			for(Task t:TaskHandler.loadActiveTasks(getActivity())){
-				if(t.getStatus()) {
+			for (Task t : TaskHandler.loadActiveTasks(getActivity())) {
+				if (t.getStatus()) {
 					taskAdapter.addTask(t);
 				}
 			}
