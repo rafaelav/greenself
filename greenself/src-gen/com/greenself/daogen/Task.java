@@ -13,7 +13,6 @@ import de.greenrobot.dao.DaoException;
 public class Task {
 
     private boolean status;
-    private Boolean visible;
     private java.util.Date date;
     private long id;
 
@@ -37,9 +36,8 @@ public class Task {
         this.id = id;
     }
 
-    public Task(boolean status, Boolean visible, java.util.Date date, long id) {
+    public Task(boolean status, java.util.Date date, long id) {
         this.status = status;
-        this.visible = visible;
         this.date = date;
         this.id = id;
     }
@@ -56,14 +54,6 @@ public class Task {
 
     public void setStatus(boolean status) {
         this.status = status;
-    }
-
-    public Boolean getVisible() {
-        return visible;
-    }
-
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
     }
 
     public java.util.Date getDate() {
@@ -136,10 +126,9 @@ public class Task {
 
     // KEEP METHODS - put your custom methods here
     // custom constructor
-    public Task(boolean status, boolean visible, java.util.Date date, TaskSource taskSource) {
+    public Task(boolean status, java.util.Date date, TaskSource taskSource) {
         this.status = status;
         this.date = date;
-        this.visible = visible;
         setTaskSource(taskSource);
     }
     // KEEP METHODS END

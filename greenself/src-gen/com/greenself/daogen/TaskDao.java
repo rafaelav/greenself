@@ -27,9 +27,8 @@ public class TaskDao extends AbstractDao<Task, Long> {
     */
     public static class Properties {
         public final static Property Status = new Property(0, boolean.class, "status", false, "STATUS");
-        public final static Property Visible = new Property(1, Boolean.class, "visible", false, "VISIBLE");
-        public final static Property Date = new Property(2, java.util.Date.class, "date", false, "DATE");
-        public final static Property Id = new Property(3, long.class, "id", true, "_id");
+        public final static Property Date = new Property(1, java.util.Date.class, "date", false, "DATE");
+        public final static Property Id = new Property(2, long.class, "id", true, "_id");
     };
 
     private DaoSession daoSession;
@@ -49,9 +48,8 @@ public class TaskDao extends AbstractDao<Task, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'TASK' (" + //
                 "'STATUS' INTEGER NOT NULL ," + // 0: status
-                "'VISIBLE' INTEGER," + // 1: visible
-                "'DATE' INTEGER," + // 2: date
-                "'_id' INTEGER PRIMARY KEY NOT NULL );"); // 3: id
+                "'DATE' INTEGER," + // 1: date
+                "'_id' INTEGER PRIMARY KEY NOT NULL );"); // 2: id
     }
 
     /** Drops the underlying database table. */
@@ -66,16 +64,11 @@ public class TaskDao extends AbstractDao<Task, Long> {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getStatus() ? 1l: 0l);
  
-        Boolean visible = entity.getVisible();
-        if (visible != null) {
-            stmt.bindLong(2, visible ? 1l: 0l);
-        }
- 
         java.util.Date date = entity.getDate();
         if (date != null) {
-            stmt.bindLong(3, date.getTime());
+            stmt.bindLong(2, date.getTime());
         }
-        stmt.bindLong(4, entity.getId());
+        stmt.bindLong(3, entity.getId());
     }
 
     @Override
@@ -87,7 +80,7 @@ public class TaskDao extends AbstractDao<Task, Long> {
     /** @inheritdoc */
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 3);
+        return cursor.getLong(offset + 2);
     }    
 
     /** @inheritdoc */
@@ -95,9 +88,8 @@ public class TaskDao extends AbstractDao<Task, Long> {
     public Task readEntity(Cursor cursor, int offset) {
         Task entity = new Task( //
             cursor.getShort(offset + 0) != 0, // status
-            cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0, // visible
-            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)), // date
-            cursor.getLong(offset + 3) // id
+            cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)), // date
+            cursor.getLong(offset + 2) // id
         );
         return entity;
     }
@@ -106,9 +98,8 @@ public class TaskDao extends AbstractDao<Task, Long> {
     @Override
     public void readEntity(Cursor cursor, Task entity, int offset) {
         entity.setStatus(cursor.getShort(offset + 0) != 0);
-        entity.setVisible(cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0);
-        entity.setDate(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
-        entity.setId(cursor.getLong(offset + 3));
+        entity.setDate(cursor.isNull(offset + 1) ? null : new java.util.Date(cursor.getLong(offset + 1)));
+        entity.setId(cursor.getLong(offset + 2));
      }
     
     /** @inheritdoc */

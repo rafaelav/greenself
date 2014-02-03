@@ -8,7 +8,7 @@ import de.greenrobot.daogenerator.Schema;
 public class GreenselfDAOGenerator {
 
 	public static void main(String[] args) throws Exception {
-		Schema schema = new Schema(13, "com.greenself.daogen");
+		Schema schema = new Schema(14, "com.greenself.daogen");
 		schema.enableKeepSectionsByDefault();
 
 		Entity task = addTask(schema);
@@ -26,7 +26,6 @@ public class GreenselfDAOGenerator {
 		Entity task = schema.addEntity("Task");
 		//task.addIdProperty();
 		task.addBooleanProperty("status").notNull();
-		task.addBooleanProperty("visible");
 		task.addDateProperty("date");
 
 		return task;
