@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.greenself.R;
+import com.greenself.adapters.DailyTaskItemAdapter;
 import com.greenself.daogen.Task;
 
 public class DailyTaskItemView extends RelativeLayout {
@@ -23,9 +24,11 @@ public class DailyTaskItemView extends RelativeLayout {
 	private CheckBox checkBox;
 	private TextView text;
 	private Task task;
+	private DailyTaskItemAdapter adapter;
 
-	public DailyTaskItemView(Context context) {
+	public DailyTaskItemView(Context context, DailyTaskItemAdapter adapter) {
 		super(context);
+		this.adapter = adapter;
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.item_daily_task_challenge, this, true);
@@ -36,6 +39,8 @@ public class DailyTaskItemView extends RelativeLayout {
 
 	public void bind(Task t) {
 		this.task = t;
+		//reset listener
+		this.checkBox.setOnCheckedChangeListener(null);
 		this.checkBox.setChecked(this.task.getStatus());
 		this.text.setText(this.task.getTaskSource().getName());
 
@@ -47,10 +52,20 @@ public class DailyTaskItemView extends RelativeLayout {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
-				log.info("Before click: " + task.getStatus());
-				task.setStatus(isChecked);
-				log.info("After click: " + task.getStatus());
-				setTaskAppearence();
+				//if (isChecked != task.getStatus()) {
+					log.warning("Checked!");
+					log.info("Task status Before click: " + task.getStatus()
+							+ " task: " + task.getTaskSource().getName());
+					
+					task.setStatus(isChecked);
+					
+					log.info("isChecked: " + isChecked);
+					log.info("Task status After click: " + task.getStatus()
+							+ " task: " + task.getTaskSource().getName());
+					
+					setTaskAppearence();
+					adapter.onTaskStatusChanged(task);
+				//}
 			}
 		});
 	}
@@ -71,4 +86,5 @@ public class DailyTaskItemView extends RelativeLayout {
 			text.setTextColor(Color.BLACK);
 		}
 	}
+
 }
