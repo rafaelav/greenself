@@ -14,8 +14,9 @@ import com.greenself.daogen.TaskSource;
 import com.greenself.objects.Constants;
 
 public class DBManager {
-	private static final Logger log=Logger.getLogger(DBManager.class.getName());
-	
+	private static final Logger log = Logger.getLogger(DBManager.class
+			.getName());
+
 	private static DBManager instance = null;
 	private DaoSession daoSession = null;
 
@@ -45,10 +46,28 @@ public class DBManager {
 		instance.daoSession.getTaskSourceDao().deleteAll();
 		instance.daoSession.getTaskDao().deleteAll();
 		instance.daoSession.getTaskHistoryDao().deleteAll();
-		
+
 		// adding list of tasks to DB
 		TaskSource[] dbTasks = Constants.TASKS_IN_DB;
 		this.daoSession.getTaskSourceDao().insertInTx(Arrays.asList(dbTasks));
+	}
+
+	public void resetActiveTasks() {
+		if (this.daoSession == null) {
+			log.info("Trying to create the standard database before opening database session");
+			return;
+		}
+		// making sure it is free
+		instance.daoSession.getTaskDao().deleteAll();
+	}
+
+	public void resetHistory() {
+		if (this.daoSession == null) {
+			log.info("Trying to create the standard database before opening database session");
+			return;
+		}
+		// making sure it is free
+		instance.daoSession.getTaskHistoryDao().deleteAll();
 	}
 
 	public DaoSession getDaoSession() {

@@ -255,7 +255,8 @@ public class DailyTasksFragment extends Fragment {
 		}
 
 		List<Task> newTasks = TaskHandler.generateActiveTasks(getActivity(),
-				Constants.NO_OF_TASKS);
+				Constants.NO_OF_DAILY_TASKS + Constants.NO_OF_MONTHLY_TASKS
+						+ Constants.NO_OF_WEEKLY_TASKS);
 
 		// add in ui (already added in active db when they have been returned
 		// from db)

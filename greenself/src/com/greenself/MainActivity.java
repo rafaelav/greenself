@@ -2,8 +2,6 @@ package com.greenself;
 
 import java.util.logging.Logger;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -26,11 +24,12 @@ public class MainActivity extends FragmentActivity {
 				+ "");
 
 		// check existing active tasks and generate new if there aren't any
-		if (TaskHandler
-				.verifyIfPreviousTasks(this) == false) {
+		if (TaskHandler.verifyIfPreviousTasks(this) == false) {
 			log.info("No existing tasks. Need to generate.");
 
-			TaskHandler.generateActiveTasks(this, Constants.NO_OF_TASKS);
+			TaskHandler.generateActiveTasks(this, Constants.NO_OF_DAILY_TASKS
+					+ Constants.NO_OF_MONTHLY_TASKS
+					+ Constants.NO_OF_WEEKLY_TASKS);
 		} else {
 			log.info("Existing tasks");
 		}

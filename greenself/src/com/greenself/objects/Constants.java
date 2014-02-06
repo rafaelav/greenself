@@ -4,10 +4,17 @@ import com.greenself.daogen.TaskSource;
 
 public final class Constants {
 
-	public static final int NO_OF_TASKS = 5;
+	//public static final int NO_OF_TASKS = 5;
+	public static final int NO_OF_DAILY_TASKS = 4;
+	public static final int NO_OF_WEEKLY_TASKS = 2;
+	public static final int NO_OF_MONTHLY_TASKS = 1;
 	public static final String DB_NAME = "task-db";
 	public static final String SETTINGS_DONE_TASKS_VISIBILE = "done_tasks_visibility";
+	public static final String LAST_WEEKLY_UPDATE = "last_weekly_update";
+	public static final String LAST_MONTHLY_UPDATE = "last_monthly_update";
 	public static final String APP = "com.greenself";
+	public static final long BETWEEN_WEEKS = 7*24*60*60;
+	public static final long BETWEEN_MONTHS = 30*24*60*60;
 
 	// time recurrent frame
 	public enum Type {

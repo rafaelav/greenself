@@ -6,24 +6,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Paint;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.TextView;
 
-import com.greenself.DailyTasksFragment;
-import com.greenself.R;
 import com.greenself.daogen.Task;
-import com.greenself.dbhandlers.DBManager;
-import com.greenself.objects.Constants;
 
 import extraviews.DailyTaskItemView;
 
@@ -167,9 +154,5 @@ public class DailyTaskItemAdapter extends BaseAdapter {
 		}
 
 		notifyDataSetChanged();
-	}
-	
-	private void updateTasksListOrder() {
-		
 	}
 }

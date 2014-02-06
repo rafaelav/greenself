@@ -18,6 +18,7 @@ import com.greenself.daogen.TaskSource;
 import com.greenself.daogen.TaskSourceDao;
 import com.greenself.daogen.TaskSourceDao.Properties;
 import com.greenself.dbhandlers.DBManager;
+import com.greenself.objects.Constants.Type;
 
 import de.greenrobot.dao.query.LazyList;
 
@@ -204,4 +205,40 @@ public class TaskHandler {
 			}
 		}
 	}
+
+	public static void dropCompletedTasks() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public static void dropNotCompletedTasksFromActive(Type type) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static List<Task> getNotDoneWeeklyTasks() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static List<Task> getNotDoneMonthlyTasks() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static void generateNewDailyTasks(int noOfDailyTasks) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void generateNewMonthlyTasks(int noOfMonthlyTasks) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void generateNewWeeklyTasks(int noOfWeeklyTasks) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
