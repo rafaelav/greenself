@@ -44,7 +44,8 @@ public class DBManager {
 		// making sure it is free
 		instance.daoSession.getTaskSourceDao().deleteAll();
 		instance.daoSession.getTaskDao().deleteAll();
-
+		instance.daoSession.getTaskHistoryDao().deleteAll();
+		
 		// adding list of tasks to DB
 		TaskSource[] dbTasks = Constants.TASKS_IN_DB;
 		this.daoSession.getTaskSourceDao().insertInTx(Arrays.asList(dbTasks));

@@ -27,7 +27,7 @@ public class MainActivity extends FragmentActivity {
 
 		// check existing active tasks and generate new if there aren't any
 		if (TaskHandler
-				.verifyIfPreviousTasks(TaskHandler.loadActiveTasks(this)) == false) {
+				.verifyIfPreviousTasks(this) == false) {
 			log.info("No existing tasks. Need to generate.");
 
 			TaskHandler.generateActiveTasks(this, Constants.NO_OF_TASKS);

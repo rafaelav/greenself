@@ -168,4 +168,8 @@ public class DailyTaskItemAdapter extends BaseAdapter {
 
 		notifyDataSetChanged();
 	}
+	
+	private void updateTasksListOrder() {
+		
+	}
 }

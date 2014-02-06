@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.greenself.daogen.DaoSession;
 import com.greenself.daogen.Task;
 import com.greenself.daogen.TaskDao;
+import com.greenself.daogen.TaskHistory;
+import com.greenself.daogen.TaskHistoryDao;
 import com.greenself.daogen.TaskSource;
 import com.greenself.daogen.TaskSourceDao;
 import com.greenself.daogen.TaskSourceDao.Properties;
@@ -42,7 +44,8 @@ public class TaskHandler {
 	 * @return false if there are no active tasks; true if there are active
 	 *         tasks
 	 */
-	public static Boolean verifyIfPreviousTasks(List<Task> tasks) {
+	public static Boolean verifyIfPreviousTasks(Context context) {
+		List<Task> tasks = loadActiveTasks(context);
 		if (tasks.size() == 0)
 			return false;
 		return true;
@@ -167,11 +170,38 @@ public class TaskHandler {
 		taskDao.delete(oldTask);
 		taskDao.insert(newTask);
 
-		// debuging to see which are now active
+		// debugging to see which are now active
 		for (Task t : taskDao.loadAll()) {
 			log.info("Now in active: " + t.getTaskSource().getName());
 		}
 
 		return true;
+	}
+
+	/**
+	 * Saves completed tasks in the task history. Should be called at the end of
+	 * a cycle.
+	 * 
+	 * @param context
+	 */
+	public static void archiveCompletedTasks(Context context) {
+		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+		TaskHistoryDao taskHistoryDao = daoSession.getTaskHistoryDao();
+
+		// load active tasks
+		List<Task> activeTasks = daoSession.getTaskDao().loadAll();
+
+		for (Task t : activeTasks) {
+			if (t.getStatus()) {
+
+				// get current date
+				Date completedDate = new Date();
+				log.info("Current date added to archived task: "
+						+ completedDate.toString());
+
+				taskHistoryDao.insert(new TaskHistory(completedDate, t
+						.getTaskSource()));
+			}
+		}
 	}
 }

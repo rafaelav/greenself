@@ -8,23 +8,34 @@ import de.greenrobot.daogenerator.Schema;
 public class GreenselfDAOGenerator {
 
 	public static void main(String[] args) throws Exception {
-		Schema schema = new Schema(14, "com.greenself.daogen");
+		Schema schema = new Schema(16, "com.greenself.daogen");
 		schema.enableKeepSectionsByDefault();
 
 		Entity task = addTask(schema);
 		Entity taskSource = addTaskSource(schema);
+		Entity taskHistory = addTaskHistory(schema);
 
-		Property taskIdProperty = task.addIdProperty().notNull().getProperty();
-		task.addToOne(taskSource, taskIdProperty);
+		addRelations(task, taskSource, taskHistory);
 
-		addHabbit(schema);
+		// addHabbit(schema);
 
 		new DaoGenerator().generateAll(schema, "../greenself/src-gen");
 	}
 
+	private static void addRelations(Entity task, Entity taskSource,
+			Entity taskHistory) {
+		Property taskSourceIdProperty = task.addLongProperty("taskSourceId")
+				.notNull().getProperty();
+		task.addToOne(taskSource, taskSourceIdProperty);
+
+		taskSourceIdProperty = taskHistory.addLongProperty("taskSourceId")
+				.notNull().getProperty();
+		taskHistory.addToOne(taskSource, taskSourceIdProperty);
+	}
+
 	private static Entity addTask(Schema schema) {
 		Entity task = schema.addEntity("Task");
-		//task.addIdProperty();
+		task.addIdProperty();
 		task.addBooleanProperty("status").notNull();
 		task.addDateProperty("date");
 
@@ -40,6 +51,14 @@ public class GreenselfDAOGenerator {
 		taskSource.addStringProperty("name").notNull();
 
 		return taskSource;
+	}
+
+	private static Entity addTaskHistory(Schema schema) {
+		Entity taskHistory = schema.addEntity("TaskHistory");
+		taskHistory.addIdProperty();
+		taskHistory.addDateProperty("completedDate");
+
+		return taskHistory;
 	}
 
 	private static void addHabbit(Schema schema) {
