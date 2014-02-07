@@ -83,7 +83,7 @@ public class TaskSource {
         this.applicability = applicability;
         this.info = info;
         this.name = name;
-        this.type = type;
+        setType(type);
     }
     
     public void setType(Type recurrence) {
@@ -98,10 +98,18 @@ public class TaskSource {
 	    		ex.printStackTrace();
 	    		this.type = Type.DAILY;
 	    	}
-    	}
+    	} 
     	
     	return this.type;
-    }    
+    }
+
+	@Override
+	public String toString() {
+		return "TaskSource [id=" + id + ", name=" + name + ", type=" + type
+				+ ", applic=" + applicability + "]";
+	}    
+    
+    
     // KEEP METHODS END
 
 }

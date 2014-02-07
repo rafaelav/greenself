@@ -19,17 +19,18 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// only first time the app runs
 
-		log.info(DBManager.getInstance(this).getDaoSession().getTaskSourceDao()
-				.loadAll()
-				+ "");
+		// log.info(DBManager.getInstance(this).getDaoSession().getTaskSourceDao()
+		// .loadAll()
+		// + "");
 
 		// check existing active tasks and generate new if there aren't any
 		if (TaskHandler.verifyIfPreviousTasks(this) == false) {
 			log.info("No existing tasks. Need to generate.");
 
-			TaskHandler.generateActiveTasks(this, Constants.NO_OF_DAILY_TASKS
-					+ Constants.NO_OF_MONTHLY_TASKS
-					+ Constants.NO_OF_WEEKLY_TASKS);
+			TaskHandler
+					.generateActiveTasks(this, Constants.NO_OF_DAILY_TASKS,
+							Constants.NO_OF_WEEKLY_TASKS,
+							Constants.NO_OF_MONTHLY_TASKS);
 		} else {
 			log.info("Existing tasks");
 		}

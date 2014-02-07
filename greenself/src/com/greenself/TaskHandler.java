@@ -18,6 +18,7 @@ import com.greenself.daogen.TaskSource;
 import com.greenself.daogen.TaskSourceDao;
 import com.greenself.daogen.TaskSourceDao.Properties;
 import com.greenself.dbhandlers.DBManager;
+import com.greenself.objects.Constants;
 import com.greenself.objects.Constants.Type;
 
 import de.greenrobot.dao.query.LazyList;
@@ -59,36 +60,56 @@ public class TaskHandler {
 	 * @param count
 	 *            (the number of tasks to activate)
 	 */
-	public static List<Task> generateActiveTasks(Context context, int count) {
-		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
-		TaskSourceDao taskSourceDao = daoSession.getTaskSourceDao();
+	public static List<Task> generateActiveTasks(Context context,
+			int countDaily, int countWeekly, int countMonthly) {
+		List<Task> newActiveTasks = new ArrayList<Task>();
+		List<Task> newDailyTasks = generateNewTasks(context, countDaily,
+				Constants.Type.DAILY);
+		List<Task> newWeeklyTasks = generateNewTasks(context, countWeekly,
+				Constants.Type.WEEKLY);
+		List<Task> newMonthlyTasks = generateNewTasks(context, countMonthly,
+				Constants.Type.MONTHLY);
+		
+		log.info("Daily tasks generated: "+newDailyTasks.size());
+		log.info("Weekly tasks generated: "+newWeeklyTasks.size());
+		log.info("Monthly tasks generated: "+newMonthlyTasks.size());
 
-		// using queries for sorting tasks randomly and picking the first
-		List<TaskSource> taskSourceList = taskSourceDao.queryBuilder()
-				.where(Properties.Applicability.eq(true)).orderRaw("random()")
-				.limit(count).list();
-		log.info("List of random tasks: " + taskSourceList);
+		newActiveTasks.addAll(newDailyTasks);
+		newActiveTasks.addAll(newWeeklyTasks);
+		newActiveTasks.addAll(newMonthlyTasks);
 
-		Iterator<TaskSource> iterator = taskSourceList.iterator();
-
-		List<Task> newTasks = new ArrayList<Task>();
-		while (iterator.hasNext()) {
-			TaskSource ts = iterator.next();
-
-			// get current date
-			Date date = new Date();
-
-			// create task based on taskSource info
-			Task t = new Task(false, date, ts);
-
-			// insert task in active table in db
-			daoSession.getTaskDao().insert(t);
-			newTasks.add(t);
-
-			log.info("Added task: " + t.getTaskSource().getName());
-		}
-
-		return newTasks;
+		log.info("Generated new tasks "+newActiveTasks.toString());
+		return newActiveTasks;
+		// DaoSession daoSession =
+		// DBManager.getInstance(context).getDaoSession();
+		// TaskSourceDao taskSourceDao = daoSession.getTaskSourceDao();
+		//
+		// // using queries for sorting tasks randomly and picking the first
+		// List<TaskSource> taskSourceList = taskSourceDao.queryBuilder()
+		// .where(Properties.Applicability.eq(true)).orderRaw("random()")
+		// .limit(count).list();
+		// log.info("List of random tasks: " + taskSourceList);
+		//
+		// Iterator<TaskSource> iterator = taskSourceList.iterator();
+		//
+		// List<Task> newTasks = new ArrayList<Task>();
+		// while (iterator.hasNext()) {
+		// TaskSource ts = iterator.next();
+		//
+		// // get current date
+		// Date date = new Date();
+		//
+		// // create task based on taskSource info
+		// Task t = new Task(false, date, ts);
+		//
+		// // insert task in active table in db
+		// daoSession.getTaskDao().insert(t);
+		// newTasks.add(t);
+		//
+		// log.info("Added task: " + t.getTaskSource().getName());
+		// }
+		//
+		// return newTasks;
 	}
 
 	/**
@@ -96,14 +117,17 @@ public class TaskHandler {
 	 * @param context
 	 * @return a task that is applicable and is not already in the tasksList
 	 */
-	public static Task getNewTask(List<Task> tasksList, Context context) {
+	public static Task getNewTask(Context context, Type type) {
 		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+		List<Task> tasksList = daoSession.getTaskDao().loadAll();
 		TaskSourceDao taskSourceDao = daoSession.getTaskSourceDao();
 		Boolean inList = false;
 
 		// using queries for sorting tasks randomly and getting all
-		LazyList<TaskSource> taskSourceList = taskSourceDao.queryBuilder()
-				.where(Properties.Applicability.eq(true)).orderRaw("random()")
+		LazyList<TaskSource> taskSourceList = taskSourceDao
+				.queryBuilder()
+				.where(Properties.Applicability.eq(true),
+						Properties.TypeDB.eq(type.name())).orderRaw("random()")
 				.listLazy();
 
 		Task newTask = null;
@@ -206,39 +230,102 @@ public class TaskHandler {
 		}
 	}
 
-	public static void dropCompletedTasks() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public static void dropNotCompletedTasksFromActive(Type type) {
-		// TODO Auto-generated method stub
-		
+	public static void dropCompletedTasks(Context context) {
+		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+
+		// load active tasks
+		List<Task> activeTasks = daoSession.getTaskDao().loadAll();
+
+		// make list to remove
+		List<Task> toRemove = new ArrayList<Task>();
+
+		for (Task t : activeTasks) {
+			if (t.getStatus()) {
+				toRemove.add(t);
+			}
+		}
+
+		for (Task t : toRemove) {
+			activeTasks.remove(t);
+		}
 	}
 
-	public static List<Task> getNotDoneWeeklyTasks() {
-		// TODO Auto-generated method stub
-		return null;
+	public static void dropNotCompletedTasksFromActive(Context context,
+			Type type) {
+		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+
+		// load active tasks
+		List<Task> activeTasks = daoSession.getTaskDao().loadAll();
+
+		// make list to remove
+		List<Task> toRemove = new ArrayList<Task>();
+
+		for (Task t : activeTasks) {
+			// targeting not completed tasks
+			if (t.getTaskSource().getType() == type && t.getStatus() == false) {
+				log.info("Drop not completed; Type = " + type + "; Task: "
+						+ t.getTaskSource().getName());
+				toRemove.add(t);
+			}
+		}
+
+		for (Task t : toRemove) {
+			activeTasks.remove(t);
+		}
 	}
 
-	public static List<Task> getNotDoneMonthlyTasks() {
-		// TODO Auto-generated method stub
-		return null;
+	public static List<Task> getNotDoneTypeTasks(Context context, Type type) {
+		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+		// load active tasks
+		List<Task> activeTasks = daoSession.getTaskDao().loadAll();
+
+		List<Task> notDoneTasks = new ArrayList<Task>();
+
+		for (Task t : activeTasks) {
+			// targeting not completed tasks
+			if (t.getTaskSource().getType() == type && t.getStatus() == false) {
+				notDoneTasks.add(t);
+			}
+		}
+
+		log.info("Get list not completed; Type = " + type + "; Tasks: "
+				+ notDoneTasks.toString());
+
+		return notDoneTasks;
 	}
 
-	public static void generateNewDailyTasks(int noOfDailyTasks) {
-		// TODO Auto-generated method stub
-		
-	}
+	public static List<Task> generateNewTasks(Context context, int noOfTasks,
+			Type type) {
+		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+		TaskSourceDao taskSourceDao = daoSession.getTaskSourceDao();
 
-	public static void generateNewMonthlyTasks(int noOfMonthlyTasks) {
-		// TODO Auto-generated method stub
-		
-	}
+		// using queries for sorting tasks randomly and picking the first
+		List<TaskSource> taskSourceList = taskSourceDao
+				.queryBuilder()
+				.where(Properties.Applicability.eq(true),
+						Properties.TypeDB.eq(type.name())).orderRaw("random()")
+				.limit(noOfTasks).list();
+		log.info("List of random tasks: " + taskSourceList);
 
-	public static void generateNewWeeklyTasks(int noOfWeeklyTasks) {
-		// TODO Auto-generated method stub
-		
-	}
+		Iterator<TaskSource> iterator = taskSourceList.iterator();
 
+		List<Task> newTasks = new ArrayList<Task>();
+		while (iterator.hasNext()) {
+			TaskSource ts = iterator.next();
+
+			// get current date
+			Date date = new Date();
+
+			// create task based on taskSource info
+			Task t = new Task(false, date, ts);
+
+			// insert task in active table in db
+			daoSession.getTaskDao().insert(t);
+			newTasks.add(t);
+
+			log.info("Added task: " + t.getTaskSource().getName());
+		}
+
+		return newTasks;
+	}
 }

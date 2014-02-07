@@ -62,7 +62,7 @@ public class DailyTasksFragment extends Fragment {
 		// the uncompleted
 		boolean shownCompleted = prefs.getBoolean(
 				Constants.SETTINGS_DONE_TASKS_VISIBILE, true);
-		log.info("ShownCompleted option is: "+shownCompleted);
+		log.info("ShownCompleted option is: " + shownCompleted);
 
 		this.taskAdapter = new DailyTaskItemAdapter(tasks, getActivity(),
 				shownCompleted);
@@ -135,8 +135,8 @@ public class DailyTasksFragment extends Fragment {
 		log.info("Item to change at position " + info.position + ": "
 				+ oldTask.getTaskSource().getName());
 
-		Task newTask = TaskHandler.getNewTask(taskAdapter.getTasks(),
-				getActivity());
+		Task newTask = TaskHandler.getNewTask(getActivity(), oldTask
+				.getTaskSource().getType());
 		boolean switched = TaskHandler.switchTasks(oldTask, newTask,
 				getActivity());
 
@@ -163,8 +163,8 @@ public class DailyTasksFragment extends Fragment {
 				.update(unapplicableTask.getTaskSource());
 		// because this will not appear anymore something else must take its
 		// place
-		Task newTask = TaskHandler.getNewTask(taskAdapter.getTasks(),
-				getActivity());
+		Task newTask = TaskHandler.getNewTask(getActivity(), unapplicableTask
+				.getTaskSource().getType());
 
 		// update ui
 		taskAdapter.addTask(newTask);
@@ -203,9 +203,11 @@ public class DailyTasksFragment extends Fragment {
 					return true;
 				case R.id.completed_visibility:
 					// changeDoneTasksVisibility();
-					log.info("ShownCompleted before change: "+taskAdapter.isShowCompleted());
+					log.info("ShownCompleted before change: "
+							+ taskAdapter.isShowCompleted());
 					changeShowCompleted();
-					log.info("ShownCompleted after change: "+taskAdapter.isShowCompleted());
+					log.info("ShownCompleted after change: "
+							+ taskAdapter.isShowCompleted());
 					return true;
 				}
 				return true;
@@ -216,8 +218,8 @@ public class DailyTasksFragment extends Fragment {
 	}
 
 	private void addNewTask() {
-		Task newTask = TaskHandler.getNewTask(taskAdapter.getTasks(),
-				getActivity());
+		// only adding tasks that can be done during that day
+		Task newTask = TaskHandler.getNewTask(getActivity(), Constants.Type.DAILY);
 
 		if (newTask != null) {
 			// update active db
@@ -246,7 +248,7 @@ public class DailyTasksFragment extends Fragment {
 		for (Task t : taskAdapter.getTasks()) {
 			toRemove.add(t);
 		}
-		log.info("Removing all tasks to generate new: "+toRemove.toString());
+		log.info("Removing all tasks to generate new: " + toRemove.toString());
 
 		// remove from active and from ui now
 		for (Task t : toRemove) {
@@ -255,8 +257,8 @@ public class DailyTasksFragment extends Fragment {
 		}
 
 		List<Task> newTasks = TaskHandler.generateActiveTasks(getActivity(),
-				Constants.NO_OF_DAILY_TASKS + Constants.NO_OF_MONTHLY_TASKS
-						+ Constants.NO_OF_WEEKLY_TASKS);
+				Constants.NO_OF_DAILY_TASKS, Constants.NO_OF_WEEKLY_TASKS,
+				Constants.NO_OF_MONTHLY_TASKS);
 
 		// add in ui (already added in active db when they have been returned
 		// from db)
