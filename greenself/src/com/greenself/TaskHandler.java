@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.greenself.constants.Constants;
+import com.greenself.constants.Constants.Type;
 import com.greenself.daogen.DaoSession;
 import com.greenself.daogen.Task;
 import com.greenself.daogen.TaskDao;
@@ -18,8 +20,6 @@ import com.greenself.daogen.TaskSource;
 import com.greenself.daogen.TaskSourceDao;
 import com.greenself.daogen.TaskSourceDao.Properties;
 import com.greenself.dbhandlers.DBManager;
-import com.greenself.objects.Constants;
-import com.greenself.objects.Constants.Type;
 
 import de.greenrobot.dao.query.LazyList;
 
@@ -69,16 +69,16 @@ public class TaskHandler {
 				Constants.Type.WEEKLY);
 		List<Task> newMonthlyTasks = generateNewTasks(context, countMonthly,
 				Constants.Type.MONTHLY);
-		
-		log.info("Daily tasks generated: "+newDailyTasks.size());
-		log.info("Weekly tasks generated: "+newWeeklyTasks.size());
-		log.info("Monthly tasks generated: "+newMonthlyTasks.size());
+
+		log.info("Daily tasks generated: " + newDailyTasks.size());
+		log.info("Weekly tasks generated: " + newWeeklyTasks.size());
+		log.info("Monthly tasks generated: " + newMonthlyTasks.size());
 
 		newActiveTasks.addAll(newDailyTasks);
 		newActiveTasks.addAll(newWeeklyTasks);
 		newActiveTasks.addAll(newMonthlyTasks);
 
-		log.info("Generated new tasks "+newActiveTasks.toString());
+		log.info("Generated new tasks " + newActiveTasks.toString());
 		return newActiveTasks;
 		// DaoSession daoSession =
 		// DBManager.getInstance(context).getDaoSession();
@@ -232,45 +232,33 @@ public class TaskHandler {
 
 	public static void dropCompletedTasks(Context context) {
 		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+		TaskDao taskDao = daoSession.getTaskDao();
 
 		// load active tasks
-		List<Task> activeTasks = daoSession.getTaskDao().loadAll();
-
-		// make list to remove
-		List<Task> toRemove = new ArrayList<Task>();
+		List<Task> activeTasks = taskDao.loadAll();
 
 		for (Task t : activeTasks) {
 			if (t.getStatus()) {
-				toRemove.add(t);
+				taskDao.delete(t);
 			}
-		}
-
-		for (Task t : toRemove) {
-			activeTasks.remove(t);
 		}
 	}
 
 	public static void dropNotCompletedTasksFromActive(Context context,
 			Type type) {
 		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+		TaskDao taskDao = daoSession.getTaskDao();
 
 		// load active tasks
-		List<Task> activeTasks = daoSession.getTaskDao().loadAll();
-
-		// make list to remove
-		List<Task> toRemove = new ArrayList<Task>();
+		List<Task> activeTasks = taskDao.loadAll();
 
 		for (Task t : activeTasks) {
 			// targeting not completed tasks
 			if (t.getTaskSource().getType() == type && t.getStatus() == false) {
 				log.info("Drop not completed; Type = " + type + "; Task: "
 						+ t.getTaskSource().getName());
-				toRemove.add(t);
+				taskDao.delete(t);
 			}
-		}
-
-		for (Task t : toRemove) {
-			activeTasks.remove(t);
 		}
 	}
 

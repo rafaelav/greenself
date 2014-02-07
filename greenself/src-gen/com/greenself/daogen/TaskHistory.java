@@ -131,6 +131,12 @@ public class TaskHistory {
         setTaskSource(taskSource);
     }
 
+	@Override
+	public String toString() {
+		return "TaskHistory [id=" + id + ", completedDate=" + completedDate
+				+ ", taskSource=" + taskSource.getName() + "]";
+	}
+
     // KEEP METHODS END
 
 }

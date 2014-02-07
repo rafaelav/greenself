@@ -27,12 +27,13 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.greenself.adapters.DailyTaskItemAdapter;
+import com.greenself.constants.Constants;
 import com.greenself.daogen.Task;
 import com.greenself.daogen.TaskDao;
 import com.greenself.dbhandlers.DBManager;
-import com.greenself.objects.Constants;
+import com.greenself.observers.TasksChangeListener;
 
-public class DailyTasksFragment extends Fragment {
+public class DailyTasksFragment extends Fragment implements TasksChangeListener {
 
 	private static final Logger log = Logger.getLogger(DailyTasksFragment.class
 			.getName());
@@ -48,6 +49,10 @@ public class DailyTasksFragment extends Fragment {
 
 		taskListView = (ListView) view.findViewById(R.id.TasksListView);
 		registerForContextMenu(taskListView);
+		
+		//TODO - check
+		// register as listener for changes at end of cycles
+		EndOfCycleHandler.getInstance().addChangeListener(this);
 
 		List<Task> tasks;
 
@@ -219,7 +224,8 @@ public class DailyTasksFragment extends Fragment {
 
 	private void addNewTask() {
 		// only adding tasks that can be done during that day
-		Task newTask = TaskHandler.getNewTask(getActivity(), Constants.Type.DAILY);
+		Task newTask = TaskHandler.getNewTask(getActivity(),
+				Constants.Type.DAILY);
 
 		if (newTask != null) {
 			// update active db
@@ -283,5 +289,16 @@ public class DailyTasksFragment extends Fragment {
 					.putBoolean(Constants.SETTINGS_DONE_TASKS_VISIBILE, true)
 					.commit();
 		}
+	}
+
+	// TODO ask if it seems ok
+	@Override
+	public void tasksChanged() {
+		boolean shownCompleted = prefs.getBoolean(
+				Constants.SETTINGS_DONE_TASKS_VISIBILE, true);
+		this.taskAdapter = new DailyTaskItemAdapter(
+				TaskHandler.loadActiveTasks(getActivity()), getActivity(),
+				shownCompleted);
+		this.taskAdapter.notifyDataSetChanged();
 	}
 }

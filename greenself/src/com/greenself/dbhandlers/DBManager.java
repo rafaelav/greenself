@@ -6,12 +6,11 @@ import java.util.logging.Logger;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.greenself.constants.Constants;
 import com.greenself.daogen.DaoMaster;
 import com.greenself.daogen.DaoMaster.DevOpenHelper;
 import com.greenself.daogen.DaoSession;
-import com.greenself.daogen.Task;
 import com.greenself.daogen.TaskSource;
-import com.greenself.objects.Constants;
 
 public class DBManager {
 	private static final Logger log = Logger.getLogger(DBManager.class

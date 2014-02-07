@@ -8,12 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.greenself.constants.Constants;
 import com.greenself.dbhandlers.DBManager;
-import com.greenself.objects.Constants;
 
 public class MainActivity extends FragmentActivity {
 	private static final Logger log = Logger.getLogger(MainActivity.class
 			.getName());
+	private DailyTasksFragment dailyTasksFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,9 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		super.onCreate(savedInstanceState);
+
+		this.dailyTasksFragment = (DailyTasksFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.daily_tasks_fragment);
 		setContentView(R.layout.activity_main);
 
 	}
@@ -57,5 +61,13 @@ public class MainActivity extends FragmentActivity {
 					Toast.LENGTH_LONG).show();
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		EndOfCycleHandler.getInstance().checkEndOfCycle(this,
+				dailyTasksFragment);
 	}
 }
