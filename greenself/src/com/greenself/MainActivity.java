@@ -2,6 +2,8 @@ package com.greenself;
 
 import java.util.logging.Logger;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -23,6 +25,17 @@ public class MainActivity extends FragmentActivity {
 		// log.info(DBManager.getInstance(this).getDaoSession().getTaskSourceDao()
 		// .loadAll()
 		// + "");
+
+		// check if database is initialized
+		SharedPreferences prefs = this.getSharedPreferences(Constants.APP,
+				Context.MODE_PRIVATE);
+		int databaseVersion = prefs.getInt(Constants.PREF_DB_VERSION, 0);
+		if (databaseVersion < Constants.APP_DB_VERSION) {
+			DBManager.getInstance(this).resetDB();
+			prefs.edit()
+					.putInt(Constants.PREF_DB_VERSION, Constants.APP_DB_VERSION)
+					.commit();
+		}
 
 		// check existing active tasks and generate new if there aren't any
 		if (TaskHandler.verifyIfPreviousTasks(this) == false) {

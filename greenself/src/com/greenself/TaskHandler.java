@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.greenself.constants.Constants;
@@ -209,7 +210,7 @@ public class TaskHandler {
 	 * 
 	 * @param context
 	 */
-	public static void archiveCompletedTasks(Context context) {
+	public static void archiveCompletedTasks(Context context, Type type) {
 		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
 		TaskHistoryDao taskHistoryDao = daoSession.getTaskHistoryDao();
 
@@ -217,7 +218,7 @@ public class TaskHandler {
 		List<Task> activeTasks = daoSession.getTaskDao().loadAll();
 
 		for (Task t : activeTasks) {
-			if (t.getStatus()) {
+			if (t.getTaskSource().getType() == type && t.getStatus()) {
 
 				// get current date
 				Date completedDate = new Date();
@@ -230,7 +231,7 @@ public class TaskHandler {
 		}
 	}
 
-	public static void dropCompletedTasks(Context context) {
+	public static void dropCompletedTasks(Context context, Type type) {
 		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
 		TaskDao taskDao = daoSession.getTaskDao();
 
@@ -238,7 +239,7 @@ public class TaskHandler {
 		List<Task> activeTasks = taskDao.loadAll();
 
 		for (Task t : activeTasks) {
-			if (t.getStatus()) {
+			if (t.getTaskSource().getType() == type && t.getStatus()) {
 				taskDao.delete(t);
 			}
 		}
@@ -312,6 +313,29 @@ public class TaskHandler {
 			newTasks.add(t);
 
 			log.info("Added task: " + t.getTaskSource().getName());
+		}
+
+		// update time stamp for last daily update
+		// get last updates of monthly/weekly tasks
+		Date now = new Date();
+		SharedPreferences prefs = context.getSharedPreferences(Constants.APP,
+				Context.MODE_PRIVATE);
+		switch (type) {
+		case DAILY:
+			prefs.edit()
+					.putLong(Constants.LAST_DAILY_UPDATE, now.getTime() / 1000)
+					.commit();
+			break;
+		case WEEKLY:
+			prefs.edit()
+					.putLong(Constants.LAST_WEEKLY_UPDATE, now.getTime() / 1000)
+					.commit();
+			break;
+		case MONTHLY:
+			prefs.edit()
+					.putLong(Constants.LAST_MONTHLY_UPDATE,
+							now.getTime() / 1000).commit();
+			break;
 		}
 
 		return newTasks;

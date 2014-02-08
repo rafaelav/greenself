@@ -4,7 +4,9 @@ import com.greenself.daogen.TaskSource;
 
 public final class Constants {
 
-	//public static final int NO_OF_TASKS = 5;
+	// public static final int NO_OF_TASKS = 5;
+	public static final String PREF_DB_VERSION = "db_version";
+	public static final int APP_DB_VERSION = 1;
 	public static final int NO_OF_DAILY_TASKS = 4;
 	public static final int NO_OF_WEEKLY_TASKS = 2;
 	public static final int NO_OF_MONTHLY_TASKS = 1;
@@ -14,13 +16,13 @@ public final class Constants {
 	public static final String LAST_MONTHLY_UPDATE = "last_monthly_update";
 	public static final String LAST_DAILY_UPDATE = "last_monthly_update";
 	public static final String APP = "com.greenself";
-	public static final long BETWEEN_DAYS = 1*30;//24*60*60;
-	public static final long BETWEEN_WEEKS = 2*30;//7*24*60*60;
-	public static final long BETWEEN_MONTHS = 3*30;//30*24*60*60;
+	public static final long BETWEEN_DAYS = 1 * 30;// 24*60*60;
+	public static final long BETWEEN_WEEKS = 2 * 30;// 7*24*60*60;
+	public static final long BETWEEN_MONTHS = 10 * 30;// 30*24*60*60;
 
 	// time recurrent frame
 	public enum Type {
-		DAILY, WEEKLY, MONTHLY, YEARLY
+		DAILY, WEEKLY, MONTHLY
 	};
 
 	public static final TaskSource[] TASKS_IN_DB = new TaskSource[] {
@@ -111,7 +113,7 @@ public final class Constants {
 					"Every two minutes you save on your shower can conserve more than ten gallons of water. If everyone in the country saved just one gallon from their daily shower, over the course of the year it would equal twice the amount of freshwater withdrawn from the Great Lakes every day."),
 			new TaskSource(
 					true,
-					Type.YEARLY,
+					Type.MONTHLY,
 					"Plant a tree",
 					"It's good for the air, the land, can shade your house and save on cooling (plant on the west side of your home), and they can also improve the value of your property. Make it meaningful for the whole family and plant a tree every year for each member."),
 			new TaskSource(
@@ -136,12 +138,12 @@ public final class Constants {
 					"Always turn off incandescent bulbs when you leave a room. Fluorescent bulbs are more affected by the number of times it is switched on and off, so turn them off when you leave a room for 15 minutes or more. You'll save energy on the bulb itself, but also on cooling costs, as lights contribute heat to a room."),
 			new TaskSource(
 					true,
-					Type.YEARLY,
+					Type.MONTHLY,
 					"Recycle old phones",
 					"The average cell phone lasts around 18 months, which means 130 million phones will be retired each year. If they go into landfills, the phones and their batteries introduce toxic substances into our environment. There are plenty of reputable programs where you can recycle your phone, many which benefit noble causes."),
 			new TaskSource(
 					true,
-					Type.YEARLY,
+					Type.MONTHLY,
 					"Maintain your vehicle",
 					"Not only are you extending the life of your vehicle, but you are creating less pollution and saving gas. A properly maintained vehicle, clean air filters, and inflated tires can greatly improve your vehicle's performance. And it might not hurt to clean out the trunk—all that extra weight could be costing you at the pump."),
 			new TaskSource(
@@ -194,5 +196,4 @@ public final class Constants {
 					Type.WEEKLY,
 					"Use rechargable batteries",
 					"Each year 15 billion batteries produced and sold and most of them are disposable alkaline batteries. Only a fraction of those are recycled. Buy a charger and a few sets of rechargeable batteries. Although it requires an upfront investment, it is one that should pay off in no time. And on Christmas morning when all the stores are closed? You'll be fully stocked."), };
-
 }

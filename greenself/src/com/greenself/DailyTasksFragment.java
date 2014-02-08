@@ -49,14 +49,19 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 
 		taskListView = (ListView) view.findViewById(R.id.TasksListView);
 		registerForContextMenu(taskListView);
-		
-		//TODO - check
+
+		// TODO - check
 		// register as listener for changes at end of cycles
 		EndOfCycleHandler.getInstance().addChangeListener(this);
 
 		List<Task> tasks;
 
 		tasks = TaskHandler.loadActiveTasks(getActivity());
+		//TODO - check if ok to generate when they don't exist
+		if (tasks.size() == 0)
+			TaskHandler.generateActiveTasks(getActivity(),
+					Constants.NO_OF_DAILY_TASKS, Constants.NO_OF_WEEKLY_TASKS,
+					Constants.NO_OF_MONTHLY_TASKS);
 
 		log.info("Active tasks: " + tasks);
 
@@ -293,12 +298,13 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 
 	// TODO ask if it seems ok
 	@Override
-	public void tasksChanged() {
-		boolean shownCompleted = prefs.getBoolean(
-				Constants.SETTINGS_DONE_TASKS_VISIBILE, true);
-		this.taskAdapter = new DailyTaskItemAdapter(
-				TaskHandler.loadActiveTasks(getActivity()), getActivity(),
-				shownCompleted);
-		this.taskAdapter.notifyDataSetChanged();
+	public void onTasksChanged() {
+		// boolean shownCompleted = prefs.getBoolean(
+		// Constants.SETTINGS_DONE_TASKS_VISIBILE, true);
+		// this.taskAdapter = new DailyTaskItemAdapter(
+		// TaskHandler.loadActiveTasks(getActivity()), getActivity(),
+		// shownCompleted);
+		this.taskAdapter.replaceTasks(TaskHandler
+				.loadActiveTasks(getActivity()));
 	}
 }
