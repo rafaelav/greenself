@@ -291,17 +291,17 @@ public class TaskHandler {
 			prefs.edit()
 					.putLong(Constants.LAST_DAILY_UPDATE, now.getTime() / 1000)
 					.commit();
-			break;
+			return newTasks;
 		case WEEKLY:
 			prefs.edit()
 					.putLong(Constants.LAST_WEEKLY_UPDATE, now.getTime() / 1000)
 					.commit();
-			break;
+			return newTasks;
 		case MONTHLY:
 			prefs.edit()
 					.putLong(Constants.LAST_MONTHLY_UPDATE,
 							now.getTime() / 1000).commit();
-			break;
+			return newTasks;
 		}
 
 		return newTasks;

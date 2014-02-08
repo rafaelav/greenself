@@ -52,6 +52,7 @@ public class EndOfCycleHandler extends ObserverPatternWatched {
 		if (now.getTime() / 1000 - lastWeeklyUpdateTime >= Constants.BETWEEN_WEEKS) {
 			endOfCycleUpdates(context, Constants.Type.WEEKLY);
 		}
+		log.info("Now "+now.getTime()/1000+", then:"+lastMonthlyUpdateTime);
 		if (now.getTime() / 1000 - lastMonthlyUpdateTime >= Constants.BETWEEN_MONTHS) {
 			endOfCycleUpdates(context, Constants.Type.MONTHLY);
 		}

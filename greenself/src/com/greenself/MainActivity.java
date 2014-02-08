@@ -77,8 +77,8 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
+	protected void onResume() {
+		super.onResume();
 
 		EndOfCycleHandler.getInstance().checkEndOfCycle(this,
 				dailyTasksFragment);

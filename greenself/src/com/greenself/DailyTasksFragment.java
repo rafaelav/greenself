@@ -304,6 +304,7 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 		// this.taskAdapter = new DailyTaskItemAdapter(
 		// TaskHandler.loadActiveTasks(getActivity()), getActivity(),
 		// shownCompleted);
+		log.info("Triggered task updates");
 		this.taskAdapter.replaceTasks(TaskHandler
 				.loadActiveTasks(getActivity()));
 	}

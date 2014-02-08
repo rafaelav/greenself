@@ -156,8 +156,8 @@ public class DailyTaskItemAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	public void replaceTasks(List<Task> loadActiveTasks) {
-		ArrayList<Task> newTasks = new ArrayList<Task>(tasks);
+	public void replaceTasks(List<Task> activeTasks) {
+		ArrayList<Task> newTasks = new ArrayList<Task>(activeTasks);
 		this.tasks = newTasks;
 
 		// establish which task list to use
