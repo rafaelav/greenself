@@ -58,10 +58,10 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 
 		tasks = TaskHandler.loadActiveTasks(getActivity());
 		//TODO - check if ok to generate when they don't exist
-		if (tasks.size() == 0)
-			TaskHandler.generateActiveTasks(getActivity(),
-					Constants.NO_OF_DAILY_TASKS, Constants.NO_OF_WEEKLY_TASKS,
-					Constants.NO_OF_MONTHLY_TASKS);
+		// if (tasks.size() == 0)
+		// TaskHandler.generateActiveTasks(getActivity(),
+		// Constants.NO_OF_DAILY_TASKS, Constants.NO_OF_WEEKLY_TASKS,
+		// Constants.NO_OF_MONTHLY_TASKS);
 
 		log.info("Active tasks: " + tasks);
 

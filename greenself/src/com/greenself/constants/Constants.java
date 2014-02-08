@@ -18,7 +18,7 @@ public final class Constants {
 	public static final String APP = "com.greenself";
 	public static final long BETWEEN_DAYS = 1 * 30;// 24*60*60;
 	public static final long BETWEEN_WEEKS = 2 * 30;// 7*24*60*60;
-	public static final long BETWEEN_MONTHS = 10 * 30;// 30*24*60*60;
+	public static final long BETWEEN_MONTHS = 3 * 30;// 30*24*60*60;
 
 	// time recurrent frame
 	public enum Type {

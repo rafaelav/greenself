@@ -81,36 +81,6 @@ public class TaskHandler {
 
 		log.info("Generated new tasks " + newActiveTasks.toString());
 		return newActiveTasks;
-		// DaoSession daoSession =
-		// DBManager.getInstance(context).getDaoSession();
-		// TaskSourceDao taskSourceDao = daoSession.getTaskSourceDao();
-		//
-		// // using queries for sorting tasks randomly and picking the first
-		// List<TaskSource> taskSourceList = taskSourceDao.queryBuilder()
-		// .where(Properties.Applicability.eq(true)).orderRaw("random()")
-		// .limit(count).list();
-		// log.info("List of random tasks: " + taskSourceList);
-		//
-		// Iterator<TaskSource> iterator = taskSourceList.iterator();
-		//
-		// List<Task> newTasks = new ArrayList<Task>();
-		// while (iterator.hasNext()) {
-		// TaskSource ts = iterator.next();
-		//
-		// // get current date
-		// Date date = new Date();
-		//
-		// // create task based on taskSource info
-		// Task t = new Task(false, date, ts);
-		//
-		// // insert task in active table in db
-		// daoSession.getTaskDao().insert(t);
-		// newTasks.add(t);
-		//
-		// log.info("Added task: " + t.getTaskSource().getName());
-		// }
-		//
-		// return newTasks;
 	}
 
 	/**
@@ -136,11 +106,7 @@ public class TaskHandler {
 
 		while (iterator.hasNext()) {
 			TaskSource ts = iterator.next();
-
-			// skip if not applicable
-			// if (ts.getApplicability() == false)
-			// continue;
-
+			
 			// making sure it is not one of the tasks which were already in the
 			// list including the one we're trying to exchange
 			inList = false;
@@ -263,25 +229,25 @@ public class TaskHandler {
 		}
 	}
 
-	public static List<Task> getNotDoneTypeTasks(Context context, Type type) {
-		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
-		// load active tasks
-		List<Task> activeTasks = daoSession.getTaskDao().loadAll();
-
-		List<Task> notDoneTasks = new ArrayList<Task>();
-
-		for (Task t : activeTasks) {
-			// targeting not completed tasks
-			if (t.getTaskSource().getType() == type && t.getStatus() == false) {
-				notDoneTasks.add(t);
-			}
-		}
-
-		log.info("Get list not completed; Type = " + type + "; Tasks: "
-				+ notDoneTasks.toString());
-
-		return notDoneTasks;
-	}
+//	public static List<Task> getNotDoneTypeTasks(Context context, Type type) {
+//		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+//		// load active tasks
+//		List<Task> activeTasks = daoSession.getTaskDao().loadAll();
+//
+//		List<Task> notDoneTasks = new ArrayList<Task>();
+//
+//		for (Task t : activeTasks) {
+//			// targeting not completed tasks
+//			if (t.getTaskSource().getType() == type && t.getStatus() == false) {
+//				notDoneTasks.add(t);
+//			}
+//		}
+//
+//		log.info("Get list not completed; Type = " + type + "; Tasks: "
+//				+ notDoneTasks.toString());
+//
+//		return notDoneTasks;
+//	}
 
 	public static List<Task> generateNewTasks(Context context, int noOfTasks,
 			Type type) {

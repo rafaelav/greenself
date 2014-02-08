@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 
 import com.greenself.constants.Constants;
 import com.greenself.constants.Constants.Type;
-import com.greenself.daogen.Task;
 import com.greenself.dbhandlers.DBManager;
 import com.greenself.observers.ObserverPatternWatched;
 import com.greenself.observers.TasksChangeListener;

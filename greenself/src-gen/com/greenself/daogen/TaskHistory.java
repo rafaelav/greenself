@@ -134,7 +134,7 @@ public class TaskHistory {
 	@Override
 	public String toString() {
 		return "TaskHistory [id=" + id + ", completedDate=" + completedDate
-				+ ", taskSource=" + taskSource.getName() + "]";
+				+ ", taskSource=" + getTaskSource().getName() + "]";
 	}
 
     // KEEP METHODS END
