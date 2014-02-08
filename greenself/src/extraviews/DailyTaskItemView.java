@@ -54,14 +54,8 @@ public class DailyTaskItemView extends RelativeLayout {
 					boolean isChecked) {
 				//if (isChecked != task.getStatus()) {
 					log.warning("Checked!");
-					log.info("Task status Before click: " + task.getStatus()
-							+ " task: " + task.getTaskSource().getName());
 					
 					task.setStatus(isChecked);
-					
-					log.info("isChecked: " + isChecked);
-					log.info("Task status After click: " + task.getStatus()
-							+ " task: " + task.getTaskSource().getName());
 					
 					setTaskAppearence();
 					adapter.onTaskStatusChanged(task);

@@ -1,8 +1,6 @@
 package com.greenself;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Logger;
 
 import android.content.Context;
@@ -11,13 +9,11 @@ import android.content.SharedPreferences;
 import com.greenself.constants.Constants;
 import com.greenself.constants.Constants.Type;
 import com.greenself.dbhandlers.DBManager;
-import com.greenself.observers.ObserverPatternWatched;
-import com.greenself.observers.TasksChangeListener;
 
-public class EndOfCycleHandler extends ObserverPatternWatched {
+public class EndOfCycleHandler {
 	private static final Logger log = Logger.getLogger(EndOfCycleHandler.class
 			.getName());
-	private List<TasksChangeListener> listenerList = new ArrayList<TasksChangeListener>();
+	//private List<TasksChangeListener> listenerList = new ArrayList<TasksChangeListener>();
 	// private static DailyTasksFragment dailyTasksFragment;
 	private static EndOfCycleHandler instance = null;
 
@@ -33,7 +29,9 @@ public class EndOfCycleHandler extends ObserverPatternWatched {
 		return instance;
 	}
 
-	public void checkEndOfCycle(Context context, DailyTasksFragment fragment) {
+	public Boolean checkEndOfCycle(Context context) {
+		Boolean identifiedEndOfACycle = false;
+
 		// dailyTasksFragment = fragment;
 		SharedPreferences prefs = context.getSharedPreferences(Constants.APP,
 				Context.MODE_PRIVATE);
@@ -48,18 +46,23 @@ public class EndOfCycleHandler extends ObserverPatternWatched {
 
 		if (now.getTime() / 1000 - lastDailyUpdateTime >= Constants.BETWEEN_DAYS) {
 			endOfCycleUpdates(context, Constants.Type.DAILY);
+			identifiedEndOfACycle = true;
 		}
 		if (now.getTime() / 1000 - lastWeeklyUpdateTime >= Constants.BETWEEN_WEEKS) {
 			endOfCycleUpdates(context, Constants.Type.WEEKLY);
+			identifiedEndOfACycle = true;
 		}
-		log.info("Now "+now.getTime()/1000+", then:"+lastMonthlyUpdateTime);
 		if (now.getTime() / 1000 - lastMonthlyUpdateTime >= Constants.BETWEEN_MONTHS) {
 			endOfCycleUpdates(context, Constants.Type.MONTHLY);
+			identifiedEndOfACycle = true;
 		}
+
+		log.info("Identified an end of a cycle: "+identifiedEndOfACycle);
+		return identifiedEndOfACycle;
 	}
 
 	public void endOfCycleUpdates(Context context, Type type) {
-		// save to history the tasks that have been completed 
+		// save to history the tasks that have been completed
 		TaskHandler.archiveCompletedTasks(context, type);
 		log.info("Now in History: "
 				+ DBManager.getInstance(context).getDaoSession()
@@ -88,20 +91,19 @@ public class EndOfCycleHandler extends ObserverPatternWatched {
 		}
 
 		// notify changes to listeners
-		notifyListeners();
+		// notifyListeners();
 	}
 
-	// TODO - check
-	private void notifyListeners() {
-		for (TasksChangeListener listener : this.listenerList) {
-			listener.onTasksChanged();
-		}
+	// // TODO - check
+	// private void notifyListeners() {
+	// for (TasksChangeListener listener : this.listenerList) {
+	// listener.onTasksChanged();
+	// }
+	// }
 
-	}
-
-	// TODO - check
-	@Override
-	public void addChangeListener(TasksChangeListener newListener) {
-		listenerList.add(newListener);
-	}
+	// // TODO - check
+	// @Override
+	// public void addChangeListener(TasksChangeListener newListener) {
+	// listenerList.add(newListener);
+	// }
 }

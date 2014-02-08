@@ -44,14 +44,11 @@ public class DailyTaskItemAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		log.warning("ShownTasks size: " + shownTasks.size());
 		return shownTasks.size();
 	}
 
 	@Override
 	public Task getItem(int position) {
-		log.info("Item at " + position + ": "
-				+ shownTasks.get(position).getTaskSource().getName());
 		return shownTasks.get(position);
 	}
 
@@ -68,8 +65,6 @@ public class DailyTaskItemAdapter extends BaseAdapter {
 
 		// tie the convert view to the task at hand (either new view or recycled
 		// view)
-		log.info("Start binding for: " + position + " "
-				+ getItem(position).getTaskSource().getName());
 		((DailyTaskItemView) convertView).bind(getItem(position));
 
 		return convertView;
@@ -129,9 +124,7 @@ public class DailyTaskItemAdapter extends BaseAdapter {
 		if (!showCompleted) {
 			// the task is now done so shouldn't be seen
 			if (task.getStatus()) {
-				log.info("Before erasing from shown: " + shownTasks.toString());
 				this.shownTasks.remove(task);
-				log.info("After erasing from shown: " + shownTasks.toString());
 				notifyDataSetChanged();
 			} else { // should not reach this point
 				this.shownTasks.add(task);

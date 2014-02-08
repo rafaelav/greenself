@@ -50,18 +50,13 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 		taskListView = (ListView) view.findViewById(R.id.TasksListView);
 		registerForContextMenu(taskListView);
 
-		// TODO - check
+		// TODO - gave up pattern because of loader
 		// register as listener for changes at end of cycles
-		EndOfCycleHandler.getInstance().addChangeListener(this);
+		// EndOfCycleHandler.getInstance().addChangeListener(this);
 
 		List<Task> tasks;
 
 		tasks = TaskHandler.loadActiveTasks(getActivity());
-		//TODO - check if ok to generate when they don't exist
-		// if (tasks.size() == 0)
-		// TaskHandler.generateActiveTasks(getActivity(),
-		// Constants.NO_OF_DAILY_TASKS, Constants.NO_OF_WEEKLY_TASKS,
-		// Constants.NO_OF_MONTHLY_TASKS);
 
 		log.info("Active tasks: " + tasks);
 

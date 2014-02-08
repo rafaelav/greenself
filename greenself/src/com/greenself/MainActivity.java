@@ -6,32 +6,30 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.greenself.constants.Constants;
 import com.greenself.dbhandlers.DBManager;
+import com.greenself.loaders.CycleUpdatesLoader;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements
+		LoaderCallbacks<Boolean> {
 	private static final Logger log = Logger.getLogger(MainActivity.class
 			.getName());
 	private DailyTasksFragment dailyTasksFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// only first time the app runs
-
-		// log.info(DBManager.getInstance(this).getDaoSession().getTaskSourceDao()
-		// .loadAll()
-		// + "");
-
 		// check if database is initialized
 		SharedPreferences prefs = this.getSharedPreferences(Constants.APP,
 				Context.MODE_PRIVATE);
 		int databaseVersion = prefs.getInt(Constants.PREF_DB_VERSION, 0);
 		if (databaseVersion < Constants.APP_DB_VERSION) {
-			DBManager.getInstance(this).resetDB();
+			DBManager.getInstance(getBaseContext()).resetDB();
 			prefs.edit()
 					.putInt(Constants.PREF_DB_VERSION, Constants.APP_DB_VERSION)
 					.commit();
@@ -51,8 +49,6 @@ public class MainActivity extends FragmentActivity {
 
 		super.onCreate(savedInstanceState);
 
-		this.dailyTasksFragment = (DailyTasksFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.daily_tasks_fragment);
 		setContentView(R.layout.activity_main);
 
 	}
@@ -79,8 +75,28 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		EndOfCycleHandler.getInstance().checkEndOfCycle(this,
-				dailyTasksFragment);
+		// log.info("IN RESUME");
+		getSupportLoaderManager().initLoader(0, null, this);
 	}
+
+	@Override
+	public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+		return new CycleUpdatesLoader(getBaseContext());
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+		if (data) {
+			this.dailyTasksFragment = (DailyTasksFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.daily_tasks_fragment);
+			this.dailyTasksFragment.onTasksChanged();
+			log.info("Should have been an update on tasks");
+		}
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Boolean> loader) {
+
+	}
+
 }

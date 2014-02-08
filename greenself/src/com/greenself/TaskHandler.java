@@ -228,27 +228,7 @@ public class TaskHandler {
 			}
 		}
 	}
-
-//	public static List<Task> getNotDoneTypeTasks(Context context, Type type) {
-//		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
-//		// load active tasks
-//		List<Task> activeTasks = daoSession.getTaskDao().loadAll();
-//
-//		List<Task> notDoneTasks = new ArrayList<Task>();
-//
-//		for (Task t : activeTasks) {
-//			// targeting not completed tasks
-//			if (t.getTaskSource().getType() == type && t.getStatus() == false) {
-//				notDoneTasks.add(t);
-//			}
-//		}
-//
-//		log.info("Get list not completed; Type = " + type + "; Tasks: "
-//				+ notDoneTasks.toString());
-//
-//		return notDoneTasks;
-//	}
-
+	
 	public static List<Task> generateNewTasks(Context context, int noOfTasks,
 			Type type) {
 		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
@@ -275,11 +255,12 @@ public class TaskHandler {
 			Task t = new Task(false, date, ts);
 
 			// insert task in active table in db
-			daoSession.getTaskDao().insert(t);
 			newTasks.add(t);
 
-			log.info("Added task: " + t.getTaskSource().getName());
 		}
+
+		log.info("Added tasks: " + newTasks.toString());
+		daoSession.getTaskDao().insertInTx(newTasks);
 
 		// update time stamp for last daily update
 		// get last updates of monthly/weekly tasks
