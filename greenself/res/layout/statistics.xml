@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <TextView 
+        android:id="@+id/statisticsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/statistics_title"
+        android:textSize="@dimen/item_title_text_size"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/big_top_margin"/>
+
+    <TextView
+        android:id="@+id/statsDailyTasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statisticsTitle"
+        android:layout_marginLeft="@dimen/big_left_margin"
+        android:layout_marginTop="@dimen/big_top_margin"
+        android:layout_alignParentLeft="true"
+        android:text="@string/statistics_daily_tasks"
+        android:textSize="@dimen/medium_text_size" />
+    
+	<TextView
+        android:id="@+id/statsDailyTasksScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statisticsTitle"
+        android:layout_marginRight="@dimen/big_right_margin"
+        android:layout_marginTop="@dimen/big_top_margin"
+        android:layout_alignParentRight="true"
+        android:text="x"
+        android:textSize="@dimen/medium_text_size" />
+
+    <TextView
+        android:id="@+id/statsWeeklyTasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statsDailyTasks"
+        android:layout_marginLeft="@dimen/big_left_margin"
+        android:layout_marginTop="@dimen/medium_top_margin"
+        android:layout_alignParentLeft="true"
+        android:text="@string/statistics_weekly_tasks"
+        android:textSize="@dimen/medium_text_size" />
+    
+	<TextView
+        android:id="@+id/statsWeeklyTasksScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statsDailyTasksScore"
+        android:layout_marginRight="@dimen/big_right_margin"
+        android:layout_marginTop="@dimen/medium_top_margin"
+        android:layout_alignParentRight="true"
+        android:text="x"
+        android:textSize="@dimen/medium_text_size" />
+    <TextView
+        android:id="@+id/statsMonthlyTasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statsWeeklyTasks"
+        android:layout_marginLeft="@dimen/big_left_margin"
+        android:layout_marginTop="@dimen/medium_top_margin"
+        android:layout_alignParentLeft="true"
+        android:text="@string/statistics_monthly_tasks"
+        android:textSize="@dimen/medium_text_size" />
+    
+	<TextView
+        android:id="@+id/statsMonthlyTasksScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statsWeeklyTasksScore"
+        android:layout_marginRight="@dimen/big_right_margin"
+        android:layout_marginTop="@dimen/medium_top_margin"
+        android:layout_alignParentRight="true"
+        android:text="x"
+        android:textSize="@dimen/medium_text_size" />
+	
+    <TextView 
+        android:id="@+id/statisticsOverallScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statsMonthlyTasksScore"
+        android:text="100 XP"
+        android:textSize="@dimen/item_title_text_size"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/big_top_margin"/>		
+</RelativeLayout>

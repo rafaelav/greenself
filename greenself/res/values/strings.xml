@@ -7,6 +7,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="random_task_text">Task goes here</string>
     <string name="day_challenge">Day\'s Challenge</string>
+    <string name="statistics_title">Your overall statistics</string>
+    <string name="statistics_daily_tasks">Daily tasks completed</string>
+    <string name="statistics_weekly_tasks">Weekly tasks completed</string>
+    <string name="statistics_monthly_tasks">Monthly tasks completed</string>
     <string name="ok">Got it!</string>
     <string name="task_long_menu_change">Change with another</string>
     <string name="task_long_menu_applicability">Not applicable</string>
