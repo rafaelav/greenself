@@ -28,6 +28,7 @@ public class TaskSourceDao extends AbstractDao<TaskSource, Long> {
         public final static Property Applicability = new Property(2, Boolean.class, "applicability", false, "APPLICABILITY");
         public final static Property Info = new Property(3, String.class, "info", false, "INFO");
         public final static Property Name = new Property(4, String.class, "name", false, "NAME");
+        public final static Property XpPoints = new Property(5, Integer.class, "xpPoints", false, "XP_POINTS");
     };
 
 
@@ -47,7 +48,8 @@ public class TaskSourceDao extends AbstractDao<TaskSource, Long> {
                 "'TYPE_DB' TEXT," + // 1: typeDB
                 "'APPLICABILITY' INTEGER," + // 2: applicability
                 "'INFO' TEXT," + // 3: info
-                "'NAME' TEXT NOT NULL );"); // 4: name
+                "'NAME' TEXT NOT NULL ," + // 4: name
+                "'XP_POINTS' INTEGER);"); // 5: xpPoints
     }
 
     /** Drops the underlying database table. */
@@ -81,6 +83,11 @@ public class TaskSourceDao extends AbstractDao<TaskSource, Long> {
             stmt.bindString(4, info);
         }
         stmt.bindString(5, entity.getName());
+ 
+        Integer xpPoints = entity.getXpPoints();
+        if (xpPoints != null) {
+            stmt.bindLong(6, xpPoints);
+        }
     }
 
     /** @inheritdoc */
@@ -97,7 +104,8 @@ public class TaskSourceDao extends AbstractDao<TaskSource, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // typeDB
             cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0, // applicability
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // info
-            cursor.getString(offset + 4) // name
+            cursor.getString(offset + 4), // name
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5) // xpPoints
         );
         return entity;
     }
@@ -110,6 +118,7 @@ public class TaskSourceDao extends AbstractDao<TaskSource, Long> {
         entity.setApplicability(cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0);
         entity.setInfo(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setName(cursor.getString(offset + 4));
+        entity.setXpPoints(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
      }
     
     /** @inheritdoc */

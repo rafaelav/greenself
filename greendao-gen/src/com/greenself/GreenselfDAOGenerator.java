@@ -8,7 +8,7 @@ import de.greenrobot.daogenerator.Schema;
 public class GreenselfDAOGenerator {
 
 	public static void main(String[] args) throws Exception {
-		Schema schema = new Schema(16, "com.greenself.daogen");
+		Schema schema = new Schema(17, "com.greenself.daogen");
 		schema.enableKeepSectionsByDefault();
 
 		Entity task = addTask(schema);
@@ -49,6 +49,7 @@ public class GreenselfDAOGenerator {
 		taskSource.addBooleanProperty("applicability");
 		taskSource.addStringProperty("info");
 		taskSource.addStringProperty("name").notNull();
+		taskSource.addIntProperty("xpPoints");
 
 		return taskSource;
 	}
