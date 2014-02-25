@@ -5,13 +5,17 @@ import java.util.logging.Logger;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.greenself.adapters.MyPagerAdapter;
 import com.greenself.constants.Constants;
 import com.greenself.dbhandlers.DBManager;
 import com.greenself.loaders.CycleUpdatesLoader;
@@ -20,7 +24,14 @@ public class MainActivity extends FragmentActivity implements
 		LoaderCallbacks<Boolean> {
 	private static final Logger log = Logger.getLogger(MainActivity.class
 			.getName());
-	private DailyTasksFragment dailyTasksFragment;
+
+	private ViewPager viewPager = null;
+
+	private Fragment findFragmentByIndex(int index) {
+		String fragmentName = "android:switcher:" + viewPager.getId() + ":"
+				+ index;
+		return getSupportFragmentManager().findFragmentByTag(fragmentName);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +62,9 @@ public class MainActivity extends FragmentActivity implements
 
 		setContentView(R.layout.activity_main);
 
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		FragmentManager fm = getSupportFragmentManager();
+		viewPager.setAdapter(new MyPagerAdapter(fm));
 	}
 
 	@Override
@@ -87,9 +101,11 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
 		if (data) {
-			this.dailyTasksFragment = (DailyTasksFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.daily_tasks_fragment);
-			this.dailyTasksFragment.onTasksChanged();
+			// this.dailyTasksFragment = (DailyTasksFragment)
+			// getSupportFragmentManager()
+			// .findFragmentById(R.id.daily_tasks_fragment);
+			DailyTasksFragment dailyTasksFragment = (DailyTasksFragment) findFragmentByIndex(MyPagerAdapter.FRAGMENT_POSITION_DAILY_TASKS);
+			dailyTasksFragment.onTasksChanged();
 			log.info("Should have been an update on tasks");
 		}
 	}
