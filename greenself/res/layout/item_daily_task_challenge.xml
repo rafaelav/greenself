@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <CheckBox
+    <com.greenself.extraviews.BeautifulCheckbox
         android:id="@+id/TaskStatusCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,22 +14,26 @@
     <TextView
         android:id="@+id/TaskTextPointsView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/TaskTextView"
+        android:layout_alignTop="@+id/TaskStatusCheckBox"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/medium_right_margin"
         android:layout_marginTop="@dimen/item_task_top_margin"
-        android:gravity="right"
+        android:gravity="center_vertical|right"
         android:text="xp"
         android:textSize="@dimen/item_task_text_size" />
 
     <TextView
         android:id="@+id/TaskTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/TaskStatusCheckBox"
+        android:layout_alignTop="@+id/TaskStatusCheckBox"
         android:layout_marginTop="@dimen/item_task_top_margin"
         android:layout_toLeftOf="@id/TaskTextPointsView"
         android:layout_toRightOf="@id/TaskStatusCheckBox"
+        android:gravity="center_vertical"
         android:text="@string/random_task_text"
         android:textSize="@dimen/item_task_text_size" />
 

@@ -1,4 +1,4 @@
-package extraviews;
+package com.greenself.extraviews;
 
 import java.util.logging.Logger;
 

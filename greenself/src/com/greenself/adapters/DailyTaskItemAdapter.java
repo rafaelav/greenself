@@ -11,8 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.greenself.daogen.Task;
-
-import extraviews.DailyTaskItemView;
+import com.greenself.extraviews.DailyTaskItemView;
 
 public class DailyTaskItemAdapter extends BaseAdapter {
 
