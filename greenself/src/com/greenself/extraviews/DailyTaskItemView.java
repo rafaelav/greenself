@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -21,7 +22,7 @@ public class DailyTaskItemView extends RelativeLayout {
 	private static final Logger log = Logger.getLogger(DailyTaskItemView.class
 			.getName());
 
-	private CheckBox checkBox;
+	private BeautifulCheckbox checkBox;
 	private TextView text;
 	private TextView points;
 	private Task task;
@@ -34,7 +35,7 @@ public class DailyTaskItemView extends RelativeLayout {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.item_daily_task_challenge, this, true);
 
-		checkBox = (CheckBox) this.findViewById(R.id.TaskStatusCheckBox);
+		checkBox = (BeautifulCheckbox) this.findViewById(R.id.TaskStatusCheckBox);
 		text = (TextView) this.findViewById(R.id.TaskTextView);
 		points = (TextView) this.findViewById(R.id.TaskTextPointsView);
 	}
@@ -42,7 +43,8 @@ public class DailyTaskItemView extends RelativeLayout {
 	public void bind(Task t) {
 		this.task = t;
 		//reset listener
-		this.checkBox.setOnCheckedChangeListener(null);
+		//this.checkBox.setOnCheckedChangeListener(null);
+		this.checkBox.setOnClickListener(null);
 		this.checkBox.setChecked(this.task.getStatus());
 		this.text.setText(this.task.getTaskSource().getName());
 		this.points.setText(this.task.getTaskSource().getXpPoints().toString()+" xp");
@@ -50,21 +52,35 @@ public class DailyTaskItemView extends RelativeLayout {
 		// making sure that tasks who are done have strike and the others don't
 		setTaskAppearence();
 
-		this.checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
+		this.checkBox.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				//if (isChecked != task.getStatus()) {
-					log.warning("Checked!");
-					
-					task.setStatus(isChecked);
-					
-					setTaskAppearence();
-					adapter.onTaskStatusChanged(task);
-				//}
+			public void onClick(View v) {
+				if (checkBox.isChecked())
+					checkBox.setChecked(false);
+				else
+					checkBox.setChecked(true);
+				task.setStatus(checkBox.isChecked());
+				
+				setTaskAppearence();
+				adapter.onTaskStatusChanged(task);				
 			}
 		});
+//		this.checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+//
+//			@Override
+//			public void onCheckedChanged(CompoundButton buttonView,
+//					boolean isChecked) {
+//				//if (isChecked != task.getStatus()) {
+//					log.warning("Checked!");
+//					
+//					task.setStatus(isChecked);
+//					
+//					setTaskAppearence();
+//					adapter.onTaskStatusChanged(task);
+//				//}
+//			}
+//		});
 	}
 
 	/**
