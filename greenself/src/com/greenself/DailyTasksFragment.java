@@ -13,17 +13,15 @@ import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.greenself.adapters.DailyTaskItemAdapter;
@@ -97,14 +95,16 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 
 		taskListView.setAdapter(this.taskAdapter);
 
-		final ImageButton dailyExtraMenuButton = (ImageButton) view
-				.findViewById(R.id.DailyExtraMenuButton);
-		dailyExtraMenuButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				onPopupButtonClick(dailyExtraMenuButton);
-			}
-		});
+		// final ImageButton dailyExtraMenuButton = (ImageButton) view
+		// .findViewById(R.id.DailyExtraMenuButton);
+		// dailyExtraMenuButton.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View v) {
+		// onPopupButtonClick(dailyExtraMenuButton);
+		// }
+		// });
+		
+		setHasOptionsMenu(true);
 
 		return view;
 	}
@@ -192,35 +192,63 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 				.updateInTx(taskAdapter.getTasks());
 	}
 
-	public void onPopupButtonClick(View button) {
-		PopupMenu popup = new PopupMenu(getActivity(), button);
-		popup.getMenuInflater().inflate(R.menu.daily_popup_menu,
-				popup.getMenu());
-
-		popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-			public boolean onMenuItemClick(MenuItem item) {
-				switch (item.getItemId()) {
-				case R.id.add_task:
-					addNewTask();
-					return true;
-				case R.id.generate_tasks:
-					generateNewTasks();
-					return true;
-				case R.id.completed_visibility:
-					// changeDoneTasksVisibility();
-					log.info("ShownCompleted before change: "
-							+ taskAdapter.isShowCompleted());
-					changeShowCompleted();
-					log.info("ShownCompleted after change: "
-							+ taskAdapter.isShowCompleted());
-					return true;
-				}
-				return true;
-			}
-		});
-
-		popup.show();
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.daily_challenge_menu, menu);
 	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.add_task:
+			addNewTask();
+			return true;
+		case R.id.generate_tasks:
+			generateNewTasks();
+			return true;
+		case R.id.completed_visibility:
+			// changeDoneTasksVisibility();
+			log.info("ShownCompleted before change: "
+					+ taskAdapter.isShowCompleted());
+			changeShowCompleted();
+			log.info("ShownCompleted after change: "
+					+ taskAdapter.isShowCompleted());
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	// public void onPopupButtonClick(View button) {
+	// PopupMenu popup = new PopupMenu(getActivity(), button);
+	// popup.getMenuInflater().inflate(R.menu.daily_popup_menu,
+	// popup.getMenu());
+	//
+	// popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+	// {
+	// public boolean onMenuItemClick(MenuItem item) {
+	// switch (item.getItemId()) {
+	// case R.id.add_task:
+	// addNewTask();
+	// return true;
+	// case R.id.generate_tasks:
+	// generateNewTasks();
+	// return true;
+	// case R.id.completed_visibility:
+	// // changeDoneTasksVisibility();
+	// log.info("ShownCompleted before change: "
+	// + taskAdapter.isShowCompleted());
+	// changeShowCompleted();
+	// log.info("ShownCompleted after change: "
+	// + taskAdapter.isShowCompleted());
+	// return true;
+	// }
+	// return true;
+	// }
+	// });
+	//
+	// popup.show();
+	// }
 
 	private void addNewTask() {
 		// only adding tasks that can be done during that day
@@ -291,7 +319,6 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 		}
 	}
 
-	// TODO ask if it seems ok
 	@Override
 	public void onTasksChanged() {
 		// boolean shownCompleted = prefs.getBoolean(

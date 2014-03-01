@@ -6,28 +6,28 @@
     android:orientation="vertical" 
     android:padding="@dimen/big_top_margin">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+<!--     <RelativeLayout -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="wrap_content" > -->
 
-        <ImageButton
-            android:id="@+id/DailyExtraMenuButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/ic_button_star" />
+<!--         <ImageButton -->
+<!--             android:id="@+id/DailyExtraMenuButton" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_alignParentRight="true" -->
+<!--             android:layout_alignParentTop="true" -->
+<!--             android:src="@drawable/ic_button_star" /> -->
 
-        <TextView
-            android:id="@+id/DayChallenge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="@string/day_challenge"
-            android:textSize="@dimen/item_title_text_size" />
+<!--         <TextView -->
+<!--             android:id="@+id/DayChallenge" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_alignParentLeft="true" -->
+<!--             android:layout_centerVertical="true" -->
+<!--             android:text="@string/day_challenge" -->
+<!--             android:textSize="@dimen/item_title_text_size" /> -->
 
-    </RelativeLayout>
+<!--     </RelativeLayout> -->
 
     <ListView
         android:id="@+id/TasksListView"
