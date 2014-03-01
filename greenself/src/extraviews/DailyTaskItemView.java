@@ -23,6 +23,7 @@ public class DailyTaskItemView extends RelativeLayout {
 
 	private CheckBox checkBox;
 	private TextView text;
+	private TextView points;
 	private Task task;
 	private DailyTaskItemAdapter adapter;
 
@@ -35,6 +36,7 @@ public class DailyTaskItemView extends RelativeLayout {
 
 		checkBox = (CheckBox) this.findViewById(R.id.TaskStatusCheckBox);
 		text = (TextView) this.findViewById(R.id.TaskTextView);
+		points = (TextView) this.findViewById(R.id.TaskTextPointsView);
 	}
 
 	public void bind(Task t) {
@@ -43,6 +45,7 @@ public class DailyTaskItemView extends RelativeLayout {
 		this.checkBox.setOnCheckedChangeListener(null);
 		this.checkBox.setChecked(this.task.getStatus());
 		this.text.setText(this.task.getTaskSource().getName());
+		this.points.setText(this.task.getTaskSource().getXpPoints().toString()+" xp");
 
 		// making sure that tasks who are done have strike and the others don't
 		setTaskAppearence();

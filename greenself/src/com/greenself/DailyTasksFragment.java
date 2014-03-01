@@ -48,10 +48,6 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 		taskListView = (ListView) view.findViewById(R.id.TasksListView);
 		registerForContextMenu(taskListView);
 
-		// TODO - gave up pattern because of loader
-		// register as listener for changes at end of cycles
-		// EndOfCycleHandler.getInstance().addChangeListener(this);
-
 		List<Task> tasks;
 
 		tasks = TaskHandler.loadActiveTasks(getActivity());
@@ -94,15 +90,6 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 		});
 
 		taskListView.setAdapter(this.taskAdapter);
-
-		// final ImageButton dailyExtraMenuButton = (ImageButton) view
-		// .findViewById(R.id.DailyExtraMenuButton);
-		// dailyExtraMenuButton.setOnClickListener(new OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// onPopupButtonClick(dailyExtraMenuButton);
-		// }
-		// });
 		
 		setHasOptionsMenu(true);
 
@@ -219,37 +206,6 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 		return super.onOptionsItemSelected(item);
 	}
 
-	// public void onPopupButtonClick(View button) {
-	// PopupMenu popup = new PopupMenu(getActivity(), button);
-	// popup.getMenuInflater().inflate(R.menu.daily_popup_menu,
-	// popup.getMenu());
-	//
-	// popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
-	// {
-	// public boolean onMenuItemClick(MenuItem item) {
-	// switch (item.getItemId()) {
-	// case R.id.add_task:
-	// addNewTask();
-	// return true;
-	// case R.id.generate_tasks:
-	// generateNewTasks();
-	// return true;
-	// case R.id.completed_visibility:
-	// // changeDoneTasksVisibility();
-	// log.info("ShownCompleted before change: "
-	// + taskAdapter.isShowCompleted());
-	// changeShowCompleted();
-	// log.info("ShownCompleted after change: "
-	// + taskAdapter.isShowCompleted());
-	// return true;
-	// }
-	// return true;
-	// }
-	// });
-	//
-	// popup.show();
-	// }
-
 	private void addNewTask() {
 		// only adding tasks that can be done during that day
 		Task newTask = TaskHandler.getNewTask(getActivity(),
@@ -321,11 +277,6 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 
 	@Override
 	public void onTasksChanged() {
-		// boolean shownCompleted = prefs.getBoolean(
-		// Constants.SETTINGS_DONE_TASKS_VISIBILE, true);
-		// this.taskAdapter = new DailyTaskItemAdapter(
-		// TaskHandler.loadActiveTasks(getActivity()), getActivity(),
-		// shownCompleted);
 		log.info("Triggered task updates");
 		this.taskAdapter.replaceTasks(TaskHandler
 				.loadActiveTasks(getActivity()));
