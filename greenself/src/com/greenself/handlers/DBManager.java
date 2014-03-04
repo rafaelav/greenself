@@ -1,4 +1,4 @@
-package com.greenself.dbhandlers;
+package com.greenself.handlers;
 
 import java.util.Arrays;
 import java.util.logging.Logger;
@@ -10,6 +10,7 @@ import com.greenself.constants.Constants;
 import com.greenself.daogen.DaoMaster;
 import com.greenself.daogen.DaoMaster.DevOpenHelper;
 import com.greenself.daogen.DaoSession;
+import com.greenself.daogen.TaskDao;
 import com.greenself.daogen.TaskSource;
 
 public class DBManager {
