@@ -129,4 +129,17 @@ public class ScoreHandler {
 		instance.numberOfMonthlyTasks = monthlyTasks;
 		instance.numberOfWeeklyTasks = weeklyTasks;
 	}
+	
+	public int getNumberOfCompletedDailyTasks() {
+		return instance.numberOfDailyTasks;
+	}
+	public int getNumberOfCompletedWeeklyTasks() {
+		return instance.numberOfWeeklyTasks;
+	}
+	public int getNumberOfCompletedMonthlyTasks() {
+		return instance.numberOfMonthlyTasks;
+	}	
+	public long getOverallScore() {
+		return instance.overallScore;
+	}
 }
