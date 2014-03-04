@@ -28,7 +28,7 @@ import com.greenself.adapters.DailyTaskItemAdapter;
 import com.greenself.constants.Constants;
 import com.greenself.daogen.Task;
 import com.greenself.daogen.TaskDao;
-import com.greenself.dbhandlers.DBManager;
+import com.greenself.handlers.DBManager;
 import com.greenself.observers.TasksChangeListener;
 
 public class DailyTasksFragment extends Fragment implements TasksChangeListener {

@@ -20,7 +20,7 @@ import com.greenself.daogen.TaskHistoryDao;
 import com.greenself.daogen.TaskSource;
 import com.greenself.daogen.TaskSourceDao;
 import com.greenself.daogen.TaskSourceDao.Properties;
-import com.greenself.dbhandlers.DBManager;
+import com.greenself.handlers.DBManager;
 
 import de.greenrobot.dao.query.LazyList;
 

@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +18,8 @@ import android.widget.Toast;
 
 import com.greenself.adapters.MyPagerAdapter;
 import com.greenself.constants.Constants;
-import com.greenself.dbhandlers.DBManager;
+import com.greenself.handlers.DBManager;
+import com.greenself.handlers.ScoreHandler;
 import com.greenself.loaders.CycleUpdatesLoader;
 
 public class MainActivity extends FragmentActivity implements
@@ -65,6 +67,8 @@ public class MainActivity extends FragmentActivity implements
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		FragmentManager fm = getSupportFragmentManager();
 		viewPager.setAdapter(new MyPagerAdapter(fm));
+		
+		ScoreHandler.getInstance(this).calculateAllStatistics();
 	}
 
 	@Override
@@ -105,7 +109,8 @@ public class MainActivity extends FragmentActivity implements
 			// getSupportFragmentManager()
 			// .findFragmentById(R.id.daily_tasks_fragment);
 			DailyTasksFragment dailyTasksFragment = (DailyTasksFragment) findFragmentByIndex(MyPagerAdapter.FRAGMENT_POSITION_DAILY_TASKS);
-			dailyTasksFragment.onTasksChanged();
+			if(dailyTasksFragment != null)
+				dailyTasksFragment.onTasksChanged();
 			log.info("Should have been an update on tasks");
 		}
 	}

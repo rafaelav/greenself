@@ -7,9 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,8 +39,6 @@ public class DailyTaskItemView extends RelativeLayout {
 
 	public void bind(Task t) {
 		this.task = t;
-		//reset listener
-		//this.checkBox.setOnCheckedChangeListener(null);
 		this.checkBox.setOnClickListener(null);
 		this.checkBox.setChecked(this.task.getStatus());
 		this.text.setText(this.task.getTaskSource().getName());
@@ -66,21 +61,6 @@ public class DailyTaskItemView extends RelativeLayout {
 				adapter.onTaskStatusChanged(task);				
 			}
 		});
-//		this.checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-//
-//			@Override
-//			public void onCheckedChanged(CompoundButton buttonView,
-//					boolean isChecked) {
-//				//if (isChecked != task.getStatus()) {
-//					log.warning("Checked!");
-//					
-//					task.setStatus(isChecked);
-//					
-//					setTaskAppearence();
-//					adapter.onTaskStatusChanged(task);
-//				//}
-//			}
-//		});
 	}
 
 	/**

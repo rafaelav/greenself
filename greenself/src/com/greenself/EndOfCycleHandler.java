@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 
 import com.greenself.constants.Constants;
 import com.greenself.constants.Constants.Type;
-import com.greenself.dbhandlers.DBManager;
+import com.greenself.handlers.DBManager;
 
 public class EndOfCycleHandler {
 	private static final Logger log = Logger.getLogger(EndOfCycleHandler.class
