@@ -133,7 +133,7 @@ public class TaskHistory {
 	@Override
 	public String toString() {
 		return "TaskHistory [id=" + id + ", completedDate=" + completedDate
-				+ ", taskSource=" + getTaskSource().getName() + "]";
+				+ ", taskSource=" + getTaskSource() + "]";
 	}
     // KEEP METHODS END
 

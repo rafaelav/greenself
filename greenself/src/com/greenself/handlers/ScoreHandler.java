@@ -21,18 +21,18 @@ public class ScoreHandler {
 			+ TaskSourceDao.Properties.XpPoints.columnName + ") FROM "
 			+ TaskHistoryDao.TABLENAME + " JOIN " + TaskSourceDao.TABLENAME
 			+ " ON " + TaskHistoryDao.TABLENAME + "."
-			+ TaskHistoryDao.Properties.Id.columnName + "="
+			+ TaskHistoryDao.Properties.TaskSourceId.columnName + "="
 			+ TaskSourceDao.TABLENAME + "."
 			+ TaskSourceDao.Properties.Id.columnName;
 	private static final Logger log = Logger.getLogger(ScoreHandler.class
 			.getName());
 	private static ScoreHandler instance = null;
 	private static final String QUERY_COUNT_TASKS = "SELECT count("
-			+ TaskSourceDao.TABLENAME + "."
-			+ TaskSourceDao.Properties.Id.columnName + ") FROM "
+			+ TaskHistoryDao.TABLENAME + "."
+			+ TaskHistoryDao.Properties.Id.columnName + ") FROM "
 			+ TaskSourceDao.TABLENAME + " JOIN " + TaskHistoryDao.TABLENAME
 			+ " ON " + TaskHistoryDao.TABLENAME + "."
-			+ TaskHistoryDao.Properties.Id.columnName + "="
+			+ TaskHistoryDao.Properties.TaskSourceId.columnName + "="
 			+ TaskSourceDao.TABLENAME + "."
 			+ TaskSourceDao.Properties.Id.columnName + " WHERE "
 			+ TaskSourceDao.Properties.TypeDB.columnName + " = ?";
@@ -50,7 +50,7 @@ public class ScoreHandler {
 		if (instance == null)
 			instance = new ScoreHandler();
 
-		instance.context = context;
+		instance.context = context.getApplicationContext();
 
 		return instance;
 	}
@@ -99,28 +99,30 @@ public class ScoreHandler {
 
 		// get count for all previous daily tasks
 		cursor = database.rawQuery(QUERY_COUNT_TASKS,
-				new String[] { Constants.Type.DAILY.toString() });
+				new String[] { Constants.Type.DAILY.name() });
 		cursor.moveToFirst();
 		dailyTasks = dailyTasks + cursor.getInt(0);
-		log.info("COUNT of daily tasks (history):" + cursor.getInt(0));
+		log.info("[History Info]"+QUERY_COUNT_TASKS);
+		log.info("[History Info] Count of daily tasks:" + cursor.getInt(0));
 		cursor.close();
 
 		// get count for all previous weekly tasks
 		cursor = database.rawQuery(QUERY_COUNT_TASKS,
-				new String[] { Constants.Type.WEEKLY.toString() });
+				new String[] { Constants.Type.WEEKLY.name() });
 		cursor.moveToFirst();
 		weeklyTasks = weeklyTasks + cursor.getInt(0);
-		log.info("COUNT of weekly tasks (history):" + cursor.getInt(0));
+		log.info("[History Info] Count of weekly tasks:" + cursor.getInt(0));
 		cursor.close();
 		
 		// get count for all previous monthly tasks
 		cursor = database.rawQuery(QUERY_COUNT_TASKS,
-				new String[] { Constants.Type.MONTHLY.toString() });
+				new String[] { Constants.Type.MONTHLY.name() });
 		cursor.moveToFirst();
 		monthlyTasks = monthlyTasks + cursor.getInt(0);
-		log.info("COUNT of monthly tasks (history):" + cursor.getInt(0));
+		log.info("[History Info] Count of monthly tasks:" + cursor.getInt(0));
 		cursor.close();
 		
+		log.info("[History Info] Task history:"+DBManager.getInstance(context).getDaoSession().getTaskHistoryDao().loadAll());
 		// update instance scores
 		instance.overallScore = score;
 		instance.numberOfDailyTasks = dailyTasks;

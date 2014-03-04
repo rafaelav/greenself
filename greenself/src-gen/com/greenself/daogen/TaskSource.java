@@ -118,7 +118,7 @@ public class TaskSource {
 
 	@Override
 	public String toString() {
-		return "TaskSource [id=" + id + ", name=" + name + ", type=" + type
+		return "TaskSource [id=" + id + ", name=" + name + ", type=" + getTypeDB()
 				+ ", applic=" + applicability + "]";
 	}    
     // KEEP METHODS END
