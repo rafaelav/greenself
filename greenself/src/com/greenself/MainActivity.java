@@ -68,9 +68,7 @@ public class MainActivity extends FragmentActivity implements
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		FragmentManager fm = getSupportFragmentManager();
-		viewPager.setAdapter(new MyPagerAdapter(fm));
-		
-		ScoreHandler.getInstance(this).calculateAllStatistics();
+		viewPager.setAdapter(new MyPagerAdapter(fm));		
 	}
 
 	@Override
