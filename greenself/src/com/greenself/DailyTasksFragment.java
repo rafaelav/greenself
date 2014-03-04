@@ -28,10 +28,12 @@ import com.greenself.adapters.DailyTaskItemAdapter;
 import com.greenself.constants.Constants;
 import com.greenself.daogen.Task;
 import com.greenself.daogen.TaskDao;
+import com.greenself.events.EventsBusFactory;
+import com.greenself.events.MultipleTasksChangeEvent;
 import com.greenself.handlers.DBManager;
-import com.greenself.observers.TasksChangeListener;
+import com.squareup.otto.Subscribe;
 
-public class DailyTasksFragment extends Fragment implements TasksChangeListener {
+public class DailyTasksFragment extends Fragment {
 
 	private static final Logger log = Logger.getLogger(DailyTasksFragment.class
 			.getName());
@@ -92,6 +94,7 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 		taskListView.setAdapter(this.taskAdapter);
 		
 		setHasOptionsMenu(true);
+		EventsBusFactory.getInstance().register(this);
 
 		return view;
 	}
@@ -275,8 +278,7 @@ public class DailyTasksFragment extends Fragment implements TasksChangeListener 
 		}
 	}
 
-	@Override
-	public void onTasksChanged() {
+	@Subscribe public void onMultipleTasksChanged(MultipleTasksChangeEvent mtcEvent) {
 		log.info("Triggered task updates");
 		this.taskAdapter.replaceTasks(TaskHandler
 				.loadActiveTasks(getActivity()));

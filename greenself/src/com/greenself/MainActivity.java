@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.greenself.adapters.MyPagerAdapter;
 import com.greenself.constants.Constants;
+import com.greenself.events.EventsBusFactory;
+import com.greenself.events.MultipleTasksChangeEvent;
 import com.greenself.handlers.DBManager;
 import com.greenself.handlers.ScoreHandler;
 import com.greenself.loaders.CycleUpdatesLoader;
@@ -29,11 +31,11 @@ public class MainActivity extends FragmentActivity implements
 
 	private ViewPager viewPager = null;
 
-	private Fragment findFragmentByIndex(int index) {
-		String fragmentName = "android:switcher:" + viewPager.getId() + ":"
-				+ index;
-		return getSupportFragmentManager().findFragmentByTag(fragmentName);
-	}
+//	private Fragment findFragmentByIndex(int index) {
+//		String fragmentName = "android:switcher:" + viewPager.getId() + ":"
+//				+ index;
+//		return getSupportFragmentManager().findFragmentByTag(fragmentName);
+//	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +93,8 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
+	protected void onStart() {
+		super.onStart();
 		// log.info("IN RESUME");
 		getSupportLoaderManager().initLoader(0, null, this);
 	}
@@ -108,9 +110,10 @@ public class MainActivity extends FragmentActivity implements
 			// this.dailyTasksFragment = (DailyTasksFragment)
 			// getSupportFragmentManager()
 			// .findFragmentById(R.id.daily_tasks_fragment);
-			DailyTasksFragment dailyTasksFragment = (DailyTasksFragment) findFragmentByIndex(MyPagerAdapter.FRAGMENT_POSITION_DAILY_TASKS);
-			if(dailyTasksFragment != null)
-				dailyTasksFragment.onTasksChanged();
+//			DailyTasksFragment dailyTasksFragment = (DailyTasksFragment) findFragmentByIndex(MyPagerAdapter.FRAGMENT_POSITION_DAILY_TASKS);
+//			if(dailyTasksFragment != null)
+//				dailyTasksFragment.onTasksChanged();
+			EventsBusFactory.getInstance().post(new MultipleTasksChangeEvent());
 			log.info("Should have been an update on tasks");
 		}
 	}
