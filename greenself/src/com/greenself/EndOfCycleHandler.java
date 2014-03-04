@@ -8,20 +8,17 @@ import android.content.SharedPreferences;
 
 import com.greenself.constants.Constants;
 import com.greenself.constants.Constants.Type;
-import com.greenself.handlers.DBManager;
 
 public class EndOfCycleHandler {
 	private static final Logger log = Logger.getLogger(EndOfCycleHandler.class
 			.getName());
-	//private List<TasksChangeListener> listenerList = new ArrayList<TasksChangeListener>();
-	// private static DailyTasksFragment dailyTasksFragment;
+
 	private static EndOfCycleHandler instance = null;
 
 	public EndOfCycleHandler() {
 		// exists only to defeat instantiation
 	}
 
-	// TODO - check instance
 	public static EndOfCycleHandler getInstance() {
 		if (instance == null) {
 			instance = new EndOfCycleHandler();
@@ -57,22 +54,22 @@ public class EndOfCycleHandler {
 			identifiedEndOfACycle = true;
 		}
 
-		log.info("Identified an end of a cycle: "+identifiedEndOfACycle);
+		log.info("Identified an end of a cycle: " + identifiedEndOfACycle);
 		return identifiedEndOfACycle;
 	}
 
 	public void endOfCycleUpdates(Context context, Type type) {
 		// save to history the tasks that have been completed
 		TaskHandler.archiveCompletedTasks(context, type);
-		log.info("Now in History: "
-				+ DBManager.getInstance(context).getDaoSession()
-						.getTaskHistoryDao().loadAll().toString());
+
+		// drop task of certain type from active
+		TaskHandler.dropTasks(context, type);
 
 		// drop completed tasks
-		TaskHandler.dropCompletedTasks(context, type);
+		// TaskHandler.dropCompletedTasks(context, type);
 
 		// drop tasks from active
-		TaskHandler.dropNotCompletedTasksFromActive(context, type);
+		// TaskHandler.dropNotCompletedTasksFromActive(context, type);
 
 		// generating new daily tasks for next cycle
 		switch (type) {
@@ -89,21 +86,5 @@ public class EndOfCycleHandler {
 					Constants.NO_OF_MONTHLY_TASKS, type);
 			break;
 		}
-
-		// notify changes to listeners
-		// notifyListeners();
 	}
-
-	// // TODO - check
-	// private void notifyListeners() {
-	// for (TasksChangeListener listener : this.listenerList) {
-	// listener.onTasksChanged();
-	// }
-	// }
-
-	// // TODO - check
-	// @Override
-	// public void addChangeListener(TasksChangeListener newListener) {
-	// listenerList.add(newListener);
-	// }
 }

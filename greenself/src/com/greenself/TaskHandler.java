@@ -191,13 +191,16 @@ public class TaskHandler {
 				log.info("Current date added to archived task: "
 						+ completedDate.toString());
 
+				log.info("[History Info] Archive completed tasks at end of cycle:"+t.getTaskSource().getTypeDB()+":"+t.getTaskSource().getName());
 				taskHistoryDao.insert(new TaskHistory(completedDate, t
 						.getTaskSource()));
+				
+				log.info("[History Info] Task History after add:"+DBManager.getInstance(context).getDaoSession().getTaskHistoryDao().loadAll());
 			}
 		}
 	}
 
-	public static void dropCompletedTasks(Context context, Type type) {
+	public static void dropTasks(Context context, Type type) {
 		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
 		TaskDao taskDao = daoSession.getTaskDao();
 
@@ -205,29 +208,43 @@ public class TaskHandler {
 		List<Task> activeTasks = taskDao.loadAll();
 
 		for (Task t : activeTasks) {
-			if (t.getTaskSource().getType() == type && t.getStatus()) {
+			if (t.getTaskSource().getType() == type) {
 				taskDao.delete(t);
 			}
-		}
+		}		
 	}
-
-	public static void dropNotCompletedTasksFromActive(Context context,
-			Type type) {
-		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
-		TaskDao taskDao = daoSession.getTaskDao();
-
-		// load active tasks
-		List<Task> activeTasks = taskDao.loadAll();
-
-		for (Task t : activeTasks) {
-			// targeting not completed tasks
-			if (t.getTaskSource().getType() == type && t.getStatus() == false) {
-				log.info("Drop not completed; Type = " + type + "; Task: "
-						+ t.getTaskSource().getName());
-				taskDao.delete(t);
-			}
-		}
-	}
+	
+//	public static void dropCompletedTasks(Context context, Type type) {
+//		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+//		TaskDao taskDao = daoSession.getTaskDao();
+//
+//		// load active tasks
+//		List<Task> activeTasks = taskDao.loadAll();
+//
+//		for (Task t : activeTasks) {
+//			if (t.getTaskSource().getType() == type && t.getStatus()) {
+//				taskDao.delete(t);
+//			}
+//		}
+//	}
+//
+//	public static void dropNotCompletedTasksFromActive(Context context,
+//			Type type) {
+//		DaoSession daoSession = DBManager.getInstance(context).getDaoSession();
+//		TaskDao taskDao = daoSession.getTaskDao();
+//
+//		// load active tasks
+//		List<Task> activeTasks = taskDao.loadAll();
+//
+//		for (Task t : activeTasks) {
+//			// targeting not completed tasks
+//			if (t.getTaskSource().getType() == type && t.getStatus() == false) {
+//				log.info("Drop not completed; Type = " + type + "; Task: "
+//						+ t.getTaskSource().getName());
+//				taskDao.delete(t);
+//			}
+//		}
+//	}
 	
 	public static List<Task> generateNewTasks(Context context, int noOfTasks,
 			Type type) {
