@@ -8,4 +8,8 @@ public class SingleTaskChangeEvent {
 	public SingleTaskChangeEvent(Task task) {
 		this.task = task;
 	}
+	
+	public Task getChangedTask() {
+		return task;
+	}
 }

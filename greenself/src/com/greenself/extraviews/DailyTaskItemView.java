@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.greenself.R;
 import com.greenself.adapters.DailyTaskItemAdapter;
 import com.greenself.daogen.Task;
+import com.greenself.events.EventsBusFactory;
+import com.greenself.events.SingleTaskChangeEvent;
+import com.squareup.otto.Bus;
 
 public class DailyTaskItemView extends RelativeLayout {
 
@@ -56,6 +59,8 @@ public class DailyTaskItemView extends RelativeLayout {
 				else
 					checkBox.setChecked(true);
 				task.setStatus(checkBox.isChecked());
+				// send update to interested entities about change for a single task
+				EventsBusFactory.getInstance().post(new SingleTaskChangeEvent(task));
 				
 				setTaskAppearence();
 				adapter.onTaskStatusChanged(task);				

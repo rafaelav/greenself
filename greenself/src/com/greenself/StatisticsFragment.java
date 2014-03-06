@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.greenself.events.EventsBusFactory;
 import com.greenself.events.MultipleTasksChangeEvent;
+import com.greenself.events.SingleTaskChangeEvent;
 import com.greenself.handlers.ScoreHandler;
 import com.squareup.otto.Subscribe;
 
@@ -25,7 +26,7 @@ public class StatisticsFragment extends Fragment{
 		View view = inflater.inflate(R.layout.statistics, null);
 		
 		// calculate statistics
-		ScoreHandler.getInstance(getActivity()).calculateAllStatistics();
+		ScoreHandler.getInstance(getActivity()).updateAllStatistics();
 		
 		// update scores published on fragment
 		statsDailyTasksScore = (TextView) view.findViewById(R.id.statsDailyTasksScore);
@@ -39,12 +40,21 @@ public class StatisticsFragment extends Fragment{
 		return view;
 	}
 	
-	@Subscribe public void updateStatisticsAtMultipleTasksChange(MultipleTasksChangeEvent event) {
-		ScoreHandler.getInstance(getActivity()).calculateAllStatistics();
+	@Subscribe public void updateStatisticsForMultipleTasksChange(MultipleTasksChangeEvent event) {
+		ScoreHandler.getInstance(getActivity()).updateAllStatistics();
 		
 		statsDailyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedDailyTasks());
 		statsWeeklyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedWeeklyTasks());
 		statsMonthlyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedMonthlyTasks());
 		statsOverallScore.setText(ScoreHandler.getInstance(getActivity()).getOverallScore()+" XP");
+	}
+	
+	@Subscribe public void updateStatisticsForSingleTaskChange(SingleTaskChangeEvent event) {
+		ScoreHandler.getInstance(getActivity()).updateStatisticsForSingleTaskChange(event.getChangedTask());
+		
+		statsDailyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedDailyTasks());
+		statsWeeklyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedWeeklyTasks());
+		statsMonthlyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedMonthlyTasks());
+		statsOverallScore.setText(ScoreHandler.getInstance(getActivity()).getOverallScore()+" XP");		
 	}
 }

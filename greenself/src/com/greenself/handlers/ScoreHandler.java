@@ -59,7 +59,7 @@ public class ScoreHandler {
 	 * Goes through the history of tasks and calculates the score, the number of
 	 * daily, weekly and monthly tasks.
 	 */
-	public void calculateAllStatistics() {
+	public void updateAllStatistics() {
 		SQLiteDatabase database = DBManager.getInstance(context)
 				.getDaoSession().getDatabase();
 		TaskDao taskDao = DBManager.getInstance(context).getDaoSession()
@@ -102,7 +102,7 @@ public class ScoreHandler {
 				new String[] { Constants.Type.DAILY.name() });
 		cursor.moveToFirst();
 		dailyTasks = dailyTasks + cursor.getInt(0);
-		log.info("[History Info]"+QUERY_COUNT_TASKS);
+		log.info("[History Info]" + QUERY_COUNT_TASKS);
 		log.info("[History Info] Count of daily tasks:" + cursor.getInt(0));
 		cursor.close();
 
@@ -113,7 +113,7 @@ public class ScoreHandler {
 		weeklyTasks = weeklyTasks + cursor.getInt(0);
 		log.info("[History Info] Count of weekly tasks:" + cursor.getInt(0));
 		cursor.close();
-		
+
 		// get count for all previous monthly tasks
 		cursor = database.rawQuery(QUERY_COUNT_TASKS,
 				new String[] { Constants.Type.MONTHLY.name() });
@@ -121,24 +121,61 @@ public class ScoreHandler {
 		monthlyTasks = monthlyTasks + cursor.getInt(0);
 		log.info("[History Info] Count of monthly tasks:" + cursor.getInt(0));
 		cursor.close();
-		
-		log.info("[History Info] Task history:"+DBManager.getInstance(context).getDaoSession().getTaskHistoryDao().loadAll());
+
+		log.info("[History Info] Task history:"
+				+ DBManager.getInstance(context).getDaoSession()
+						.getTaskHistoryDao().loadAll());
+
 		// update instance scores
 		instance.overallScore = score;
 		instance.numberOfDailyTasks = dailyTasks;
 		instance.numberOfMonthlyTasks = monthlyTasks;
 		instance.numberOfWeeklyTasks = weeklyTasks;
 	}
-	
+
+	public void updateStatisticsForSingleTaskChange(Task t) {
+		if (t.getStatus()) {// adding points since task has been marked as done
+			instance.overallScore += t.getTaskSource().getXpPoints();
+			switch (t.getTaskSource().getType()) {
+			case DAILY:
+				instance.numberOfDailyTasks += 1;
+				break;
+			case WEEKLY:
+				instance.numberOfWeeklyTasks += 1;
+				break;
+			case MONTHLY:
+				instance.numberOfMonthlyTasks += 1;
+				break;
+			}
+		}
+		else {// substracting points since task has been marked as un-done
+			instance.overallScore -= t.getTaskSource().getXpPoints();
+			switch (t.getTaskSource().getType()) {
+			case DAILY:
+				instance.numberOfDailyTasks -= 1;
+				break;
+			case WEEKLY:
+				instance.numberOfWeeklyTasks -= 1;
+				break;
+			case MONTHLY:
+				instance.numberOfMonthlyTasks -= 1;
+				break;
+			}			
+		}
+	}
+
 	public int getNumberOfCompletedDailyTasks() {
 		return instance.numberOfDailyTasks;
 	}
+
 	public int getNumberOfCompletedWeeklyTasks() {
 		return instance.numberOfWeeklyTasks;
 	}
+
 	public int getNumberOfCompletedMonthlyTasks() {
 		return instance.numberOfMonthlyTasks;
-	}	
+	}
+
 	public long getOverallScore() {
 		return instance.overallScore;
 	}
