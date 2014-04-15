@@ -46,7 +46,7 @@ public class StatisticsFragment extends Fragment{
 		statsDailyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedDailyTasks());
 		statsWeeklyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedWeeklyTasks());
 		statsMonthlyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedMonthlyTasks());
-		statsOverallScore.setText(ScoreHandler.getInstance(getActivity()).getOverallScore()+" XP");
+		statsOverallScore.setText(ScoreHandler.getInstance(getActivity()).getOverallScore()+"");
 	}
 	
 	@Subscribe public void updateStatisticsForSingleTaskChange(SingleTaskChangeEvent event) {
@@ -55,6 +55,6 @@ public class StatisticsFragment extends Fragment{
 		statsDailyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedDailyTasks());
 		statsWeeklyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedWeeklyTasks());
 		statsMonthlyTasksScore.setText(""+ScoreHandler.getInstance(getActivity()).getNumberOfCompletedMonthlyTasks());
-		statsOverallScore.setText(ScoreHandler.getInstance(getActivity()).getOverallScore()+" XP");		
+		statsOverallScore.setText(ScoreHandler.getInstance(getActivity()).getOverallScore()+"");		
 	}
 }
