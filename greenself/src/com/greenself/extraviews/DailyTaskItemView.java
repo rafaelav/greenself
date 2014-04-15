@@ -45,7 +45,7 @@ public class DailyTaskItemView extends RelativeLayout {
 		this.checkBox.setOnClickListener(null);
 		this.checkBox.setChecked(this.task.getStatus());
 		this.text.setText(this.task.getTaskSource().getName());
-		this.points.setText(this.task.getTaskSource().getXpPoints().toString()+" xp");
+		this.points.setText(this.task.getTaskSource().getXpPoints().toString());
 
 		// making sure that tasks who are done have strike and the others don't
 		setTaskAppearence();
