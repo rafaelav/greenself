@@ -14,9 +14,10 @@
     <dimen name="big_top_margin">20dp</dimen>
     <dimen name="big_bottom_margin">20dp</dimen>
     <dimen name="big_left_margin">20dp</dimen>
-    <dimen name="big_right_margin">20dp</dimen>
+    <dimen name="big_right_margin">20dp</dimen> 
     <dimen name="medium_text_size">16dp</dimen>
     <dimen name="small_text_size">12dp</dimen>
-    <dimen name="full_score_top_margin">13dp</dimen>
+    <dimen name="very_big_margin">25dp</dimen>
+    <dimen name="score_background_shape_radius">7dp</dimen>
 
 </resources>

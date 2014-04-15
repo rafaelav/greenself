@@ -79,11 +79,17 @@
         android:textSize="@dimen/medium_text_size" />
 
     <RelativeLayout
+        android:id="@+id/fullScoreLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/statsMonthlyTasksScore"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/big_top_margin" >
+        android:layout_marginTop="@dimen/big_top_margin" 
+        android:background="@drawable/score_unclicked_background"
+        android:paddingTop="@dimen/medium_top_margin"
+        android:paddingBottom="@dimen/medium_top_margin"
+        android:paddingLeft="@dimen/very_big_margin"
+        android:paddingRight="@dimen/very_big_margin">
 
         <TextView
             android:id="@+id/statsOverallScore"
