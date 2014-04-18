@@ -86,7 +86,6 @@
         android:layout_below="@+id/statsMonthlyTasksScore"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/big_top_margin" 
-        android:background="@drawable/score_unclicked_background"
         android:paddingTop="@dimen/medium_top_margin"
         android:paddingBottom="@dimen/medium_top_margin"
         android:paddingLeft="@dimen/very_big_margin"
