@@ -2,6 +2,10 @@ package com.greenself;
 
 import java.util.logging.Logger;
 
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -25,10 +29,11 @@ import com.greenself.handlers.ScoreHandler;
 import com.greenself.loaders.CycleUpdatesLoader;
 
 public class MainActivity extends FragmentActivity implements
-		LoaderCallbacks<Boolean> {
+		LoaderCallbacks<Boolean>, TabListener {
 	private static final Logger log = Logger.getLogger(MainActivity.class
 			.getName());
 
+	ActionBar actionBar;
 	private ViewPager viewPager = null;
 
 //	private Fragment findFragmentByIndex(int index) {
@@ -68,7 +73,38 @@ public class MainActivity extends FragmentActivity implements
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		FragmentManager fm = getSupportFragmentManager();
-		viewPager.setAdapter(new MyPagerAdapter(fm));		
+		viewPager.setAdapter(new MyPagerAdapter(fm));
+		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int position) {
+				actionBar.setSelectedNavigationItem(position);
+			}
+			
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				// Do nothing
+			}
+			
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				// Do nothing
+			}
+		});
+		
+		actionBar = getActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		
+		ActionBar.Tab tab1 = actionBar.newTab();
+		tab1.setText("Daily");
+		tab1.setTabListener(this);
+		
+		ActionBar.Tab tab2 = actionBar.newTab();
+		tab2.setText("Progress");
+		tab2.setTabListener(this);
+		
+		actionBar.addTab(tab1);
+		actionBar.addTab(tab2);
 	}
 
 	@Override
@@ -118,7 +154,22 @@ public class MainActivity extends FragmentActivity implements
 
 	@Override
 	public void onLoaderReset(Loader<Boolean> loader) {
+		// Do nothing
+	}
 
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		// Do nothing
+	}
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		viewPager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		// Do nothing
 	}
 
 }
