@@ -9,7 +9,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,21 +75,6 @@ public class StatisticsFragment extends Fragment {
 		return view;
 	}
 
-	// @Override
-	// public void onResume() {
-	// // TODO Auto-generated method stub
-	// super.onResume();
-	// PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X,
-	// 1.2f);
-	// PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y,
-	// 1.2f);
-	// ObjectAnimator myObj =
-	// ObjectAnimator.ofPropertyValuesHolder(fullScoreLayout, pvhX, pvhY);
-	// myObj.setRepeatCount(8);
-	// myObj.setRepeatMode(ValueAnimator.REVERSE);
-	// myObj.setDuration(700);
-	// myObj.start();
-	// }
 	void startFullScoreAnimation() {
 		PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X,
 				1.2f);

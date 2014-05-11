@@ -2,18 +2,14 @@ package com.greenself;
 
 import java.util.logging.Logger;
 
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
-import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -21,8 +17,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.greenself.adapters.MyPagerAdapter;
@@ -30,24 +24,15 @@ import com.greenself.constants.Constants;
 import com.greenself.events.EventsBusFactory;
 import com.greenself.events.MultipleTasksChangeEvent;
 import com.greenself.handlers.DBManager;
-import com.greenself.handlers.ScoreHandler;
 import com.greenself.loaders.CycleUpdatesLoader;
 
 public class MainActivity extends FragmentActivity implements
 		LoaderCallbacks<Boolean>, TabListener {
 	private static final Logger log = Logger.getLogger(MainActivity.class
 			.getName());
-	
-	//private RelativeLayout fullScoreLayout;
 
 	private ActionBar actionBar;
 	private ViewPager viewPager = null;
-
-//	private Fragment findFragmentByIndex(int index) {
-//		String fragmentName = "android:switcher:" + viewPager.getId() + ":"
-//				+ index;
-//		return getSupportFragmentManager().findFragmentByTag(fragmentName);
-//	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +73,6 @@ public class MainActivity extends FragmentActivity implements
 				actionBar.setSelectedNavigationItem(position);
 				log.info("Reached on page selected");
 				if (position == MyPagerAdapter.FRAGMENT_POSITION_STATS) {
-					//fullScoreLayout = (RelativeLayout) findViewById(R.id.fullScoreLayout);
-					//startFullScoreAnimation(fullScoreLayout);
 					StatisticsFragment fragment = (StatisticsFragment) viewPager.getAdapter().instantiateItem(viewPager, position);
 					fragment.startFullScoreAnimation();
 				}
@@ -111,6 +94,9 @@ public class MainActivity extends FragmentActivity implements
 		
 		actionBar.addTab(tab1);
 		actionBar.addTab(tab2);
+		
+		// set color for tab under action bar
+		actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.dark_green)));
 	}
 
 	@Override
@@ -177,15 +163,5 @@ public class MainActivity extends FragmentActivity implements
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		// Do nothing
 	}
-	
-//	void startFullScoreAnimation (RelativeLayout fullScoreLayout) {
-//		PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.2f);
-//		PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.2f);
-//		ObjectAnimator myObj = ObjectAnimator.ofPropertyValuesHolder(fullScoreLayout, pvhX, pvhY); 
-//		myObj.setRepeatCount(8);
-//		myObj.setRepeatMode(ValueAnimator.REVERSE);
-//		myObj.setDuration(700);
-//		myObj.start();			
-//	}
 
 }
