@@ -2,6 +2,9 @@ package com.greenself;
 
 import java.util.logging.Logger;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
+import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
@@ -18,6 +21,8 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.greenself.adapters.MyPagerAdapter;
@@ -32,8 +37,10 @@ public class MainActivity extends FragmentActivity implements
 		LoaderCallbacks<Boolean>, TabListener {
 	private static final Logger log = Logger.getLogger(MainActivity.class
 			.getName());
+	
+	//private RelativeLayout fullScoreLayout;
 
-	ActionBar actionBar;
+	private ActionBar actionBar;
 	private ViewPager viewPager = null;
 
 //	private Fragment findFragmentByIndex(int index) {
@@ -74,22 +81,21 @@ public class MainActivity extends FragmentActivity implements
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		FragmentManager fm = getSupportFragmentManager();
 		viewPager.setAdapter(new MyPagerAdapter(fm));
-		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			
 			@Override
 			public void onPageSelected(int position) {
 				actionBar.setSelectedNavigationItem(position);
+				log.info("Reached on page selected");
+				if (position == MyPagerAdapter.FRAGMENT_POSITION_STATS) {
+					//fullScoreLayout = (RelativeLayout) findViewById(R.id.fullScoreLayout);
+					//startFullScoreAnimation(fullScoreLayout);
+					StatisticsFragment fragment = (StatisticsFragment) viewPager.getAdapter().instantiateItem(viewPager, position);
+					fragment.startFullScoreAnimation();
+				}
+				super.onPageSelected(position);
 			}
 			
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// Do nothing
-			}
-			
-			@Override
-			public void onPageScrollStateChanged(int arg0) {
-				// Do nothing
-			}
 		});
 		
 		actionBar = getActionBar();
@@ -171,5 +177,15 @@ public class MainActivity extends FragmentActivity implements
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		// Do nothing
 	}
+	
+//	void startFullScoreAnimation (RelativeLayout fullScoreLayout) {
+//		PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.2f);
+//		PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.2f);
+//		ObjectAnimator myObj = ObjectAnimator.ofPropertyValuesHolder(fullScoreLayout, pvhX, pvhY); 
+//		myObj.setRepeatCount(8);
+//		myObj.setRepeatMode(ValueAnimator.REVERSE);
+//		myObj.setDuration(700);
+//		myObj.start();			
+//	}
 
 }
