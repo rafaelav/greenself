@@ -40,12 +40,23 @@ public class StatisticsFragment extends Fragment {
 		// update scores published on fragment
 		statsDailyTasksScore = (TextView) view
 				.findViewById(R.id.statsDailyTasksScore);
+		statsDailyTasksScore.setText(""
+				+ ScoreHandler.getInstance(getActivity())
+						.getNumberOfCompletedDailyTasks());
 		statsWeeklyTasksScore = (TextView) view
 				.findViewById(R.id.statsWeeklyTasksScore);
+		statsWeeklyTasksScore.setText(""
+				+ ScoreHandler.getInstance(getActivity())
+						.getNumberOfCompletedWeeklyTasks());
 		statsMonthlyTasksScore = (TextView) view
 				.findViewById(R.id.statsMonthlyTasksScore);
+		statsMonthlyTasksScore.setText(""
+				+ ScoreHandler.getInstance(getActivity())
+						.getNumberOfCompletedMonthlyTasks());
 		statsOverallScore = (TextView) view
 				.findViewById(R.id.statsOverallScore);
+		statsOverallScore.setText(""
+				+ ScoreHandler.getInstance(getActivity()).getOverallScore());
 		fullScoreLayout = (RelativeLayout) view
 				.findViewById(R.id.fullScoreLayout);
 		fullScoreLayout.setClickable(true);
