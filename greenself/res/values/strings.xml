@@ -16,6 +16,6 @@
     <string name="task_long_menu_applicability">Not applicable</string>
     <string name="add_task">Add new task</string>
     <string name="generate_tasks">Generate new tasks</string>
-    <string name="visibility_completed_tasks">(Not) Show completed tasks</string>
+    <string name="visibility_completed_tasks">With/without completed tasks</string>
 
 </resources> 
