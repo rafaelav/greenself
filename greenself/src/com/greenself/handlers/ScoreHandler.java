@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.greenself.DailyTasksFragment;
 import com.greenself.constants.Constants;
@@ -47,10 +48,10 @@ public class ScoreHandler {
 	}
 
 	public static ScoreHandler getInstance(Context context) {
-		if (instance == null)
+		if (instance == null) {
 			instance = new ScoreHandler();
-
-		instance.context = context.getApplicationContext();
+			instance.context = context.getApplicationContext();
+		}
 
 		return instance;
 	}
@@ -82,10 +83,13 @@ public class ScoreHandler {
 			switch (t.getTaskSource().getType()) {
 			case DAILY:
 				dailyTasks = dailyTasks + 1;
+				break;
 			case WEEKLY:
 				weeklyTasks = weeklyTasks + 1;
+				break;
 			case MONTHLY:
 				monthlyTasks = monthlyTasks + 1;
+				break;
 			}
 		}
 
@@ -131,6 +135,8 @@ public class ScoreHandler {
 		instance.numberOfDailyTasks = dailyTasks;
 		instance.numberOfMonthlyTasks = monthlyTasks;
 		instance.numberOfWeeklyTasks = weeklyTasks;
+
+		log.info("[History info] Updated " + instance.overallScore);
 	}
 
 	public void updateStatisticsForSingleTaskChange(Task t) {
@@ -147,8 +153,7 @@ public class ScoreHandler {
 				instance.numberOfMonthlyTasks += 1;
 				break;
 			}
-		}
-		else {// substracting points since task has been marked as un-done
+		} else {// substracting points since task has been marked as un-done
 			instance.overallScore -= t.getTaskSource().getXpPoints();
 			switch (t.getTaskSource().getType()) {
 			case DAILY:
@@ -160,7 +165,7 @@ public class ScoreHandler {
 			case MONTHLY:
 				instance.numberOfMonthlyTasks -= 1;
 				break;
-			}			
+			}
 		}
 	}
 

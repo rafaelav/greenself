@@ -80,10 +80,14 @@ public class StatisticsFragment extends Fragment {
 			}
 		});
 
+		return view;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
 		// register for updates from bus
 		EventsBusFactory.getInstance().register(this);
-
-		return view;
 	}
 
 	void startFullScoreAnimation() {
@@ -139,5 +143,11 @@ public class StatisticsFragment extends Fragment {
 						.getNumberOfCompletedMonthlyTasks());
 		statsOverallScore.setText(ScoreHandler.getInstance(getActivity())
 				.getOverallScore() + "");
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		EventsBusFactory.getInstance().unregister(this);
 	}
 }
