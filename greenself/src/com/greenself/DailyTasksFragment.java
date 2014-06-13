@@ -93,10 +93,15 @@ public class DailyTasksFragment extends Fragment {
 
 		taskListView.setAdapter(this.taskAdapter);
 		
-		setHasOptionsMenu(true);
-		EventsBusFactory.getInstance().register(this);
+		setHasOptionsMenu(true);		
 
 		return view;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		EventsBusFactory.getInstance().register(this);
 	}
 
 	@Override
@@ -282,5 +287,11 @@ public class DailyTasksFragment extends Fragment {
 		log.info("Triggered task updates");
 		this.taskAdapter.replaceTasks(TaskHandler
 				.loadActiveTasks(getActivity()));
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		EventsBusFactory.getInstance().unregister(this);
 	}
 }
