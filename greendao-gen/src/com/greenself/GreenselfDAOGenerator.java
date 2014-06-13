@@ -8,12 +8,13 @@ import de.greenrobot.daogenerator.Schema;
 public class GreenselfDAOGenerator {
 
 	public static void main(String[] args) throws Exception {
-		Schema schema = new Schema(17, "com.greenself.daogen");
+		Schema schema = new Schema(22, "com.greenself.daogen");
 		schema.enableKeepSectionsByDefault();
 
 		Entity task = addTask(schema);
 		Entity taskSource = addTaskSource(schema);
 		Entity taskHistory = addTaskHistory(schema);
+		Entity quote = addQuote(schema);
 
 		addRelations(task, taskSource, taskHistory);
 
@@ -61,6 +62,14 @@ public class GreenselfDAOGenerator {
 
 		return taskHistory;
 	}
+	
+	private static Entity addQuote(Schema schema) {
+		Entity quote = schema.addEntity("Quote");
+		quote.addIdProperty();
+		quote.addStringProperty("text");
+
+		return quote;
+	}	
 
 	private static void addHabbit(Schema schema) {
 		Entity habbit = schema.addEntity("Habbit");

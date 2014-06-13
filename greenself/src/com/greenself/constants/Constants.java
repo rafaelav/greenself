@@ -1,5 +1,6 @@
 package com.greenself.constants;
 
+import com.greenself.daogen.Quote;
 import com.greenself.daogen.TaskSource;
 
 public final class Constants {
@@ -231,4 +232,47 @@ public final class Constants {
 					3,
 					"Use rechargable batteries",
 					"Each year 15 billion batteries produced and sold and most of them are disposable alkaline batteries. Only a fraction of those are recycled. Buy a charger and a few sets of rechargeable batteries. Although it requires an upfront investment, it is one that should pay off in no time. And on Christmas morning when all the stores are closed? You'll be fully stocked."), };
+
+	public static final Quote[] QUOTES_IN_DB = new Quote[] {
+		new Quote(
+				"If you can dream it, you can do it - Walt Disney"),
+		new Quote(
+				"With the new day comes new strength and new thoughts - Eleanor Roosevelt"),				
+		new Quote(
+				"In order to succeed, we must first believe that we can - Nikos Kazantzakis"),
+		new Quote(
+				"The most effective way to do it, is to do it - Amelia Earhart"),				
+		new Quote(
+				"Never, never, never give up - Winston Churchill"),
+		new Quote(
+				"things do not happen. Things are made to happen - John F. Kennedy"),				
+		new Quote(
+				"Be miserable. Or motivate yourself. Whatever has to be done, it's always your choice - Wayne Dyer"),
+		new Quote(
+				"What you do today can improve all your tomorrows - Ralph Marston"),
+		new Quote(
+				"Quality is not an act, it is a habit - Aristotle"),
+		new Quote(
+				"I'd rather attempt to do something great and fail than to attempt to do nothing and succeed - Robert H. Schuller"),				
+		new Quote(
+				"Set your goals high, and don't stop till you get there - Bo Jackson"),
+		new Quote(
+				"If you fell down yesterday, stand up today - H. G. Wells"),
+		new Quote(
+				"Only I can change my life. No one can do it for me - Carol Burnett"),
+		new Quote(
+				"You just can't beat the person who never gives up - Babe Ruth"),				
+		new Quote(
+				"A goal is a dream with a deadline - Napoleon Hill"),
+		new Quote(
+				"You can never quit. Winners never quit, and quitters never win - Ted Turner"),
+		new Quote(
+				"You can't build a reputation on what you are going to do - Henry Ford"),
+		new Quote(
+				"Act as if what you do makes a difference. It does - William James"),				
+		new Quote(
+				"We make the world we live in and shape our own environment - Orison Swett Marden"),
+		new Quote(
+				"Go for it now. The future is promised to no one - Wayne Dyer")						
+	};
 }
